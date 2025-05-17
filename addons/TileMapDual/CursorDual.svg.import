@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d4incnd3rdwef"
-path="res://.godot/imported/definex_logo.png-d1d975ed8f8864817c06ca949047d838.ctex"
+uid="uid://bth8306ui4dcx"
+path="res://.godot/imported/CursorDual.svg-af24e4bad2d22f0cc5627c83d35ae307.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://definex_logo.png"
-dest_files=["res://.godot/imported/definex_logo.png-d1d975ed8f8864817c06ca949047d838.ctex"]
+source_file="res://addons/TileMapDual/CursorDual.svg"
+dest_files=["res://.godot/imported/CursorDual.svg-af24e4bad2d22f0cc5627c83d35ae307.ctex"]
 
 [params]
 
@@ -32,3 +32,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false
