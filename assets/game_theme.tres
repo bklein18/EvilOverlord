@@ -1,0 +1,6 @@
+[gd_resource type="Theme" format=3 uid="uid://doim5rcwhni0d"]
+
+[resource]
+Button/font_sizes/font_size = 32
+GridContainer/constants/h_separation = 16
+GridContainer/constants/v_separation = 16

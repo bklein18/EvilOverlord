@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="GWJ81"
-run/main_scene="res://scenes/overworld.tscn"
+run/main_scene="res://scenes/Overworld.tscn"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 

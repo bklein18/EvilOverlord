@@ -1,0 +1,85 @@
+[gd_scene load_steps=3 format=3 uid="uid://baah4keidadhd"]
+
+[ext_resource type="Theme" uid="uid://doim5rcwhni0d" path="res://assets/game_theme.tres" id="1_bdmed"]
+
+[sub_resource type="GDScript" id="GDScript_0448q"]
+script/source = "extends Control
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass
+"
+
+[node name="Battle" type="Node2D"]
+
+[node name="BattleLayout" type="Control" parent="."]
+layout_direction = 2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1152.0
+offset_bottom = 648.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_bdmed")
+script = SubResource("GDScript_0448q")
+
+[node name="ControlPanel" type="PanelContainer" parent="BattleLayout"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -516.0
+offset_top = -170.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleLayout/ControlPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="GridContainer" type="GridContainer" parent="BattleLayout/ControlPanel/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("1_bdmed")
+columns = 2
+
+[node name="Command" type="Button" parent="BattleLayout/ControlPanel/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "COMMAND"
+
+[node name="Minions" type="Button" parent="BattleLayout/ControlPanel/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "MINIONS"
+
+[node name="Item" type="Button" parent="BattleLayout/ControlPanel/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "ITEM
+"
+
+[node name="Retreat" type="Button" parent="BattleLayout/ControlPanel/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "RETREAT"
+
+[node name="EnemyInfo" type="PanelContainer" parent="BattleLayout"]
+layout_mode = 1
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 416.0
+offset_bottom = 141.0
