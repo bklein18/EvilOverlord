@@ -19,67 +19,68 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 1152.0
-offset_bottom = 648.0
+offset_right = 320.0
+offset_bottom = 180.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_bdmed")
 script = SubResource("GDScript_0448q")
 
-[node name="ControlPanel" type="PanelContainer" parent="BattleLayout"]
+[node name="MarginContainer" type="MarginContainer" parent="BattleLayout"]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -516.0
-offset_top = -170.0
-offset_right = -16.0
-offset_bottom = -16.0
-grow_horizontal = 0
-grow_vertical = 0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="BattleLayout/ControlPanel"]
+[node name="ControlPanel" type="PanelContainer" parent="BattleLayout/MarginContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
+size_flags_horizontal = 8
+size_flags_vertical = 8
 
-[node name="GridContainer" type="GridContainer" parent="BattleLayout/ControlPanel/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BattleLayout/MarginContainer/ControlPanel"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="BattleLayout/MarginContainer/ControlPanel/MarginContainer"]
 layout_mode = 2
 theme = ExtResource("1_bdmed")
 columns = 2
 
-[node name="Command" type="Button" parent="BattleLayout/ControlPanel/MarginContainer/GridContainer"]
+[node name="Command" type="Button" parent="BattleLayout/MarginContainer/ControlPanel/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "COMMAND"
 
-[node name="Minions" type="Button" parent="BattleLayout/ControlPanel/MarginContainer/GridContainer"]
+[node name="Minions" type="Button" parent="BattleLayout/MarginContainer/ControlPanel/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "MINIONS"
 
-[node name="Item" type="Button" parent="BattleLayout/ControlPanel/MarginContainer/GridContainer"]
+[node name="Item" type="Button" parent="BattleLayout/MarginContainer/ControlPanel/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "ITEM
 "
 
-[node name="Retreat" type="Button" parent="BattleLayout/ControlPanel/MarginContainer/GridContainer"]
+[node name="Retreat" type="Button" parent="BattleLayout/MarginContainer/ControlPanel/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "RETREAT"
 
-[node name="EnemyInfo" type="PanelContainer" parent="BattleLayout"]
-layout_mode = 1
-offset_left = 16.0
-offset_top = 16.0
-offset_right = 416.0
-offset_bottom = 141.0
+[node name="EnemyInfo" type="PanelContainer" parent="BattleLayout/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleLayout/MarginContainer/EnemyInfo"]
+layout_mode = 2
+theme_override_constants/margin_top = 2
+
+[node name="Label" type="Label" parent="BattleLayout/MarginContainer/EnemyInfo/MarginContainer"]
+layout_mode = 2
+text = "ENEMY"
