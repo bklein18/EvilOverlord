@@ -1,17 +1,26 @@
 extends Node
 
 static func wild_minion_from_enum(enum_val: Minion.Minions) -> Minion:
-	var new = Minion.new()
+	var new = Minions.Minion.new()
 	new.Name = new.get_minion_name(enum_val)
 	new.Type = new.get_minion_types(enum_val)
 	var level_range = new.get_minion_level_range(enum_val)
-	new.Level = randi() % (level_range[-1] - level_range[0] + 1) + level_range[0]
-	
+	if level_range.size() > 0:
+		new.Level = randi() % (level_range[-1] - level_range[0] + 1) + level_range[0]
+		var moves = []
+		var learnset = Minion.get_learnset(enum_val)
+		for level in range(1, new.Level + 1):
+			if level in learnset.keys():
+				moves.append(learnset[level])
+				if moves.size() > 4:
+					moves.pop_front()
+		new.Moves = moves
 	return new
 
 class Minion:
-	var Name: String = "Namea"
+	var Name: String = "Name"
 	var Type: Array = []
+	var Moves: Array = []
 	var Level: int = 0
 	var Current_Health: int = 10
 	var Max_Health: int = 10
@@ -20,6 +29,8 @@ class Minion:
 	var Magic_Attack: int = 1
 	var Magic_Defense: int = 1
 	var Speed: int = 1
+	var Luck: float = 0.1
+	var Number: int = 0
 
 	enum Minions {
 		None,
@@ -48,7 +59,7 @@ class Minion:
 		Beast
 	}
 
-	func get_minion_name(minion: Minions) -> String:
+	func get_minion_name(minion: Minions.Minion.Minions) -> String:
 		match minion:
 			Minions.Dave:
 				return "Dave"
@@ -74,7 +85,7 @@ class Minion:
 				return ""
 
 	# returns an array of the minions types, will be of length one for monotypes
-	func get_minion_types(minion: Minions) -> Array:
+	func get_minion_types(minion: Minions.Minion.Minions) -> Array:
 		match minion:
 			Minions.Dave:
 				return [Types.Normal]
@@ -99,7 +110,7 @@ class Minion:
 			_:
 				return []
 				
-	func get_minion_level_range(minion: Minions) -> Array:
+	func get_minion_level_range(minion: Minions.Minion.Minions) -> Array:
 		match minion:
 			Minions.Gelatinous_Cube:
 				return range(3, 6)
@@ -116,4 +127,89 @@ class Minion:
 			Minions.Bear:
 				return range(3, 6)
 			_:
-				return []
+				return [5]
+	
+	static func get_learnset(minion: Minions.Minion.Minions) -> Dictionary:
+		match minion:
+			Minions.Gelatinous_Cube:
+				return {
+					1: Move.move_object_from_enum(Move.Moves.Charge)
+				}
+			Minions.Phyll:
+				return {
+					1: Move.move_object_from_enum(Move.Moves.Charge)
+				}
+			Minions.Yyx_yll:
+				return {
+					1: Move.move_object_from_enum(Move.Moves.Charge)
+				}
+			Minions.The_One_Who_Waits:
+				return {
+					1: Move.move_object_from_enum(Move.Moves.Charge)
+				}
+			Minions.Dhal:
+				return {
+					1: Move.move_object_from_enum(Move.Moves.Charge)
+				}
+			Minions.Eemini:
+				return {
+					1: Move.move_object_from_enum(Move.Moves.Charge)
+				}
+			Minions.Bear:
+				return {
+					1: Move.move_object_from_enum(Move.Moves.Charge)
+				}
+			_:
+				return {}
+
+class Move:
+	var name: String
+	var category: Category
+	var type: Minion.Types
+	var base_val: int
+	var number: int
+	
+	enum Category {
+		Attack,
+		Defense,
+		Magic_Attack,
+		Magic_Defense,
+		Special
+	}
+	
+	static func init(name: String, category: Category, type: Minion.Types, base_val: int, number: int) -> Move:
+		var new = Move.new()
+		new.name = name
+		new.category = category
+		new.type = type
+		new.base_val = base_val
+		new.number = number
+		return new
+		
+	enum Moves {
+		Charge,
+		Block,
+		Fireball,
+		Shield
+	}
+	
+	static var moves: Array = [
+		Move.init("Charge", Move.Category.Attack, Minion.Types.Normal, 2, 1),
+		Move.init("Block", Move.Category.Defense, Minion.Types.Normal, 2, 2),
+		Move.init("Fireball", Move.Category.Magic_Attack, Minion.Types.Dragon, 4, 3),
+		Move.init("Shield", Move.Category.Magic_Defense, Minion.Types.Fey, 3, 4)
+	]
+	
+	static func move_object_from_enum(move: Moves) -> Move:
+		match move:
+			Moves.Charge:
+				return moves[0]
+			Moves.Block:
+				return moves[1]
+			Moves.Fireball:
+				return moves[2]
+			Moves.Shield:
+				return moves[3]
+			_:
+				return moves[0]
+	

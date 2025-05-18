@@ -1,7 +1,5 @@
 extends CharacterBody2D
 
-const M = preload("res://scripts/minions.gd")
-
 const TILE_SIZE: int = 32
 const INPUTS = {"move_right": Vector2.RIGHT,
 				"move_left": Vector2.LEFT,
@@ -48,13 +46,13 @@ func move(dir: String):
 			await tween.finished
 			moving = false
 			var encounter = check_for_random_encounter()
-			if not encounter == M.Minion.Minions.None:
+			if not encounter == Minions.Minion.Minions.None:
 				encounter_triggered.emit(encounter)
 
-func check_for_random_encounter() -> M.Minion.Minions:
+func check_for_random_encounter() -> Minions.Minion.Minions:
 	if Overworld.get_custom_data_at(position, "TallGrassTile"):
 		var r = randf() + cumulative_encounter_boost
 		for encounter in encounter_list:
 			if r > encounter_probabilities[encounter]:
 				return encounter
-	return M.Minion.Minions.None
+	return Minions.Minion.Minions.None

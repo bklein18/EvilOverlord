@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cmdubb4ba0mni"
-path="res://.godot/imported/Skelly.png-b91f1afcefcf81234d585292da8d97cf.ctex"
+path="res://.godot/imported/Skelly.png-e5da7737a63cbc4b71d491b99de672b0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Skelly.png"
-dest_files=["res://.godot/imported/Skelly.png-b91f1afcefcf81234d585292da8d97cf.ctex"]
+source_file="res://assets/minions/Skelly.png"
+dest_files=["res://.godot/imported/Skelly.png-e5da7737a63cbc4b71d491b99de672b0.ctex"]
 
 [params]
 

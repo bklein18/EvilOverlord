@@ -1,6 +1,5 @@
 extends Node2D
 class_name Overworld
-const M = preload("res://scripts/minions.gd")
 
 @onready var tall_grass = $TallGrass
 @onready var player = $Player
@@ -8,15 +7,15 @@ const M = preload("res://scripts/minions.gd")
 static var _instance: Overworld = null
 
 const encounter_list := [
-	M.Minion.Minions.Phyll,
-	M.Minion.Minions.Eemini,
-	M.Minion.Minions.Bear
+	Minions.Minion.Minions.Phyll,
+	Minions.Minion.Minions.Eemini,
+	Minions.Minion.Minions.Bear
 ]
 
 const encounter_probabilities := {
-	M.Minion.Minions.Phyll: 0.95,
-	M.Minion.Minions.Eemini: 0.90,
-	M.Minion.Minions.Bear: 0.85
+	Minions.Minion.Minions.Phyll: 0.95,
+	Minions.Minion.Minions.Eemini: 0.90,
+	Minions.Minion.Minions.Bear: 0.85
 }
 
 # Called when the node enters the scene tree for the first time.
@@ -41,7 +40,7 @@ static func get_custom_data_at(position: Vector2, custom_data_name: String) -> V
 	
 
 func _on_player_encounter_triggered(encountered_minion):
-	var minion = M.wild_minion_from_enum(encountered_minion)
+	var minion = Minions.wild_minion_from_enum(encountered_minion)
 	var battle_scene = load("res://scenes/Battle.tscn").instantiate()
 	get_tree().root.add_child(battle_scene)
 	self.hide()
