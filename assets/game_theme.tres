@@ -1,6 +1,54 @@
-[gd_resource type="Theme" load_steps=21 format=3 uid="uid://doim5rcwhni0d"]
+[gd_resource type="Theme" load_steps=28 format=3 uid="uid://doim5rcwhni0d"]
 
 [ext_resource type="FontFile" uid="uid://c872bne5auvvi" path="res://assets/Axolotl.ttf" id="1_tgk0f"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ty2no"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 4.0
+bg_color = Color(0.0392157, 0.0392157, 0.0392157, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ercdv"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4oq3s"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 4.0
+bg_color = Color(0.733333, 0.733333, 0.733333, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j6cuv"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aaxgn"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tgk0f"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s1n0q"]
+bg_color = Color(0.317647, 1, 0, 1)
 
 [sub_resource type="Image" id="Image_tgk0f"]
 data = {
@@ -165,6 +213,11 @@ corner_detail = 1
 [resource]
 Button/font_sizes/font_size = 16
 Button/fonts/font = ExtResource("1_tgk0f")
+Button/styles/disabled = SubResource("StyleBoxFlat_ty2no")
+Button/styles/focus = SubResource("StyleBoxFlat_ercdv")
+Button/styles/hover = SubResource("StyleBoxFlat_4oq3s")
+Button/styles/normal = SubResource("StyleBoxFlat_j6cuv")
+Button/styles/pressed = SubResource("StyleBoxFlat_aaxgn")
 GridContainer/constants/h_separation = 4
 GridContainer/constants/v_separation = 4
 Label/fonts/font = ExtResource("1_tgk0f")
@@ -173,7 +226,9 @@ MarginContainer/constants/margin_bottom = 4
 MarginContainer/constants/margin_left = 4
 MarginContainer/constants/margin_right = 4
 MarginContainer/constants/margin_top = 4
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_tgk0f")
 ProgressBar/fonts/font = ExtResource("1_tgk0f")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_s1n0q")
 TabBar/colors/drop_mark_color = Color(1, 1, 1, 1)
 TabBar/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
 TabBar/colors/font_hovered_color = Color(0.95, 0.95, 0.95, 1)

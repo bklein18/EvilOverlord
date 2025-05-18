@@ -10,16 +10,16 @@ static func wild_minion_from_enum(enum_val: Minion.Minions) -> Minion:
 	return new
 
 class Minion:
-	var Name: String
-	var Type: Array
-	var Level: int
-	var Current_Health: int
+	var Name: String = "Namea"
+	var Type: Array = []
+	var Level: int = 0
+	var Current_Health: int = 10
 	var Max_Health: int = 10
-	var Attack: int
-	var Defense: int
-	var Magic_Attack: int
-	var Magic_Defense: int
-	var Speed: int
+	var Attack: int = 1
+	var Defense: int = 1
+	var Magic_Attack: int = 1
+	var Magic_Defense: int = 1
+	var Speed: int = 1
 
 	enum Minions {
 		None,
