@@ -133,6 +133,14 @@ class Minion:
 	
 	static func get_learnset(minion: Minions.Minion.Minions) -> Dictionary:
 		match minion:
+			Minions.Dave:
+				return {
+					1: Move.move_object_from_enum(Move.Moves.Charge)
+				}
+			Minions.Skelly:
+				return {
+					1: Move.move_object_from_enum(Move.Moves.Charge)
+				}
 			Minions.Gelatinous_Cube:
 				return {
 					1: Move.move_object_from_enum(Move.Moves.Charge)

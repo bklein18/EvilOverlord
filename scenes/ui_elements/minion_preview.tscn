@@ -1,0 +1,58 @@
+[gd_scene load_steps=4 format=3 uid="uid://cb0gj2t6o8vxr"]
+
+[ext_resource type="Script" uid="uid://bcpj7jwdhh3l3" path="res://scripts/minion_preview.gd" id="1_o55tn"]
+[ext_resource type="Texture2D" uid="uid://v7eh2ushphow" path="res://assets/minions/Dave.png" id="1_xc6xa"]
+[ext_resource type="Theme" uid="uid://doim5rcwhni0d" path="res://assets/game_theme.tres" id="2_o55tn"]
+
+[node name="MinionPreview" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -320.0
+offset_bottom = -180.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o55tn")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 1
+offset_right = 24.0
+offset_bottom = 24.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="MarginContainer/HBoxContainer/Control"]
+position = Vector2(20, 20)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_xc6xa")
+
+[node name="MinionName" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme = ExtResource("2_o55tn")
+text = "DAVE"
+
+[node name="Dash" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_o55tn")
+text = "-"
+
+[node name="HPLabel" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_o55tn")
+text = "10/10"
+
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 16)
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("2_o55tn")
+show_percentage = false

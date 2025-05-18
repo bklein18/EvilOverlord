@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://baah4keidadhd"]
+[gd_scene load_steps=7 format=3 uid="uid://baah4keidadhd"]
 
 [ext_resource type="Script" uid="uid://jk3p6c0shujj" path="res://scripts/battle.gd" id="1_0448q"]
 [ext_resource type="Theme" uid="uid://doim5rcwhni0d" path="res://assets/game_theme.tres" id="1_bdmed"]
+[ext_resource type="PackedScene" uid="uid://cb0gj2t6o8vxr" path="res://scenes/ui_elements/minion_preview.tscn" id="3_2rusm"]
 
 [sub_resource type="GDScript" id="GDScript_0448q"]
 script/source = "extends Control
@@ -14,6 +15,17 @@ func _ready():
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0448q"]
 bg_color = Color(0, 0.513726, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2rusm"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="Battle" type="Node2D"]
 script = ExtResource("1_0448q")
@@ -86,6 +98,16 @@ text = "LV. 0"
 [node name="HBoxContainer" type="HBoxContainer" parent="BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
+[node name="MarginContainer2" type="MarginContainer" parent="BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+
+[node name="PlayerHPLabel" type="Label" parent="BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer2"]
+layout_mode = 2
+text = "10/10"
+
 [node name="MarginContainer" type="MarginContainer" parent="BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 0
@@ -96,7 +118,7 @@ theme_override_constants/margin_right = 0
 layout_mode = 2
 text = "HP"
 
-[node name="ProgressBar" type="ProgressBar" parent="BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="PlayerHPBar" type="ProgressBar" parent="BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 10)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -142,6 +164,52 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "RETREAT"
+
+[node name="MovePanel" type="PanelContainer" parent="BattleLayout/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleLayout/MarginContainer/VBoxContainer/MovePanel"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer"]
+layout_mode = 2
+
+[node name="MoveBack" type="Button" parent="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "←"
+
+[node name="GridContainer" type="GridContainer" parent="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_bdmed")
+columns = 2
+
+[node name="Move1" type="Button" parent="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "MOVE 1"
+
+[node name="Move2" type="Button" parent="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "MOVE 2"
+
+[node name="Move3" type="Button" parent="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "MOVE 3
+"
+
+[node name="Move4" type="Button" parent="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "MOVE 4"
 
 [node name="EnemyInfo" type="PanelContainer" parent="BattleLayout/MarginContainer"]
 layout_mode = 2
@@ -232,6 +300,65 @@ text = "[center][color=white][pulse color=#ffffff40 frequency=1.0 ease=-2.0]→[
 fit_content = true
 scroll_active = false
 
+[node name="MinionPanel" type="MarginContainer" parent="BattleLayout/MarginContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Panel" type="Panel" parent="BattleLayout/MarginContainer/MinionPanel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2rusm")
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleLayout/MarginContainer/MinionPanel/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="MinionBack" type="Button" parent="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "←"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer"]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="MinionPreview" parent="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_2rusm")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MinionPreview2" parent="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_2rusm")]
+layout_mode = 2
+
+[node name="MinionPreview3" parent="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_2rusm")]
+layout_mode = 2
+
+[node name="MinionPreview4" parent="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_2rusm")]
+layout_mode = 2
+
+[node name="MinionPreview5" parent="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_2rusm")]
+layout_mode = 2
+
+[node name="MinionPreview6" parent="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_2rusm")]
+layout_mode = 2
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(160, 90)
 
@@ -239,3 +366,9 @@ position = Vector2(160, 90)
 [connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/ControlPanel/MarginContainer/GridContainer/Minions" to="." method="_on_minions_pressed"]
 [connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/ControlPanel/MarginContainer/GridContainer/Item" to="." method="_on_item_pressed"]
 [connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/ControlPanel/MarginContainer/GridContainer/Retreat" to="." method="_on_retreat_pressed"]
+[connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer/MoveBack" to="." method="_on_move_back_pressed"]
+[connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer/GridContainer/Move1" to="." method="_on_command_pressed"]
+[connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer/GridContainer/Move2" to="." method="_on_minions_pressed"]
+[connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer/GridContainer/Move3" to="." method="_on_item_pressed"]
+[connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer/GridContainer/Move4" to="." method="_on_retreat_pressed"]
+[connection signal="pressed" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/MinionBack" to="." method="_on_minion_back_pressed"]
