@@ -13,8 +13,8 @@ var moving: bool = false
 
 var cumulative_encounter_boost: float = 0.0
 
-var encounter_list = DI.get_with_var_name("encounter_list")
-var encounter_probabilities = DI.get_with_var_name("encounter_probabilities")
+var encounter_list
+var encounter_probabilities
 
 signal encounter_triggered(encountered_minion)
 
@@ -37,23 +37,24 @@ func _physics_process(_delta):
 		move("move_right")
 
 func move(dir: String):
-	ray.target_position = INPUTS[dir] * TILE_SIZE
-	ray.force_raycast_update()
-	if !ray.is_colliding():
-		var tween = create_tween()
-		tween.tween_property(self, "position",
-		position + INPUTS[dir] * TILE_SIZE, 1.0/ANIMATION_SPEED).set_trans(Tween.TRANS_LINEAR)
-		moving = true
-		await tween.finished
-		moving = false
-		var encounter = check_for_random_encounter()
-		if not encounter == M.Minions.None:
-			encounter_triggered.emit(encounter)
+	if self.is_visible_in_tree():
+		ray.target_position = INPUTS[dir] * TILE_SIZE
+		ray.force_raycast_update()
+		if !ray.is_colliding():
+			var tween = create_tween()
+			tween.tween_property(self, "position",
+			position + INPUTS[dir] * TILE_SIZE, 1.0/ANIMATION_SPEED).set_trans(Tween.TRANS_LINEAR)
+			moving = true
+			await tween.finished
+			moving = false
+			var encounter = check_for_random_encounter()
+			if not encounter == M.Minion.Minions.None:
+				encounter_triggered.emit(encounter)
 
-func check_for_random_encounter() -> M.Minions:
+func check_for_random_encounter() -> M.Minion.Minions:
 	if Overworld.get_custom_data_at(position, "TallGrassTile"):
 		var r = randf() + cumulative_encounter_boost
 		for encounter in encounter_list:
 			if r > encounter_probabilities[encounter]:
 				return encounter
-	return M.Minions.None
+	return M.Minion.Minions.None

@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://baah4keidadhd"]
+[gd_scene load_steps=4 format=3 uid="uid://baah4keidadhd"]
 
+[ext_resource type="Script" uid="uid://jk3p6c0shujj" path="res://scripts/battle.gd" id="1_0448q"]
 [ext_resource type="Theme" uid="uid://doim5rcwhni0d" path="res://assets/game_theme.tres" id="1_bdmed"]
 
 [sub_resource type="GDScript" id="GDScript_0448q"]
@@ -12,6 +13,7 @@ func _ready():
 "
 
 [node name="Battle" type="Node2D"]
+script = ExtResource("1_0448q")
 
 [node name="BattleLayout" type="Control" parent="."]
 layout_direction = 2
@@ -81,6 +83,9 @@ size_flags_vertical = 0
 layout_mode = 2
 theme_override_constants/margin_top = 2
 
-[node name="Label" type="Label" parent="BattleLayout/MarginContainer/EnemyInfo/MarginContainer"]
+[node name="EnemyNameLabel" type="Label" parent="BattleLayout/MarginContainer/EnemyInfo/MarginContainer"]
 layout_mode = 2
 text = "ENEMY"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(160, 90)
