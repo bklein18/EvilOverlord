@@ -17,6 +17,7 @@ var encounter_probabilities
 signal encounter_triggered(encountered_minion)
 
 @onready var ray: RayCast2D = $RayCast2D
+@onready var camera = $Camera2D
 
 func _ready():
 	position = position.snapped(Vector2.ONE * TILE_SIZE)

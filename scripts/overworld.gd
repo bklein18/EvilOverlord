@@ -46,3 +46,8 @@ func _on_player_encounter_triggered(encountered_minion):
 	self.hide()
 	player.hide()
 	battle_scene.set_wild_minion(minion)
+	await battle_scene.battle_finished
+	self.show()
+	player.show()
+	player.camera.make_current()
+	get_tree().root.remove_child(battle_scene)

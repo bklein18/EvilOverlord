@@ -4,6 +4,7 @@ static func wild_minion_from_enum(enum_val: Minion.Minions) -> Minion:
 	var new = Minions.Minion.new()
 	new.Name = new.get_minion_name(enum_val)
 	new.Type = new.get_minion_types(enum_val)
+	new.EnumVal = enum_val
 	var level_range = new.get_minion_level_range(enum_val)
 	if level_range.size() > 0:
 		new.Level = randi() % (level_range[-1] - level_range[0] + 1) + level_range[0]
@@ -19,6 +20,7 @@ static func wild_minion_from_enum(enum_val: Minion.Minions) -> Minion:
 
 class Minion:
 	var Name: String = "Name"
+	var EnumVal := Minions.None
 	var Type: Array = []
 	var Moves: Array = []
 	var Level: int = 0
