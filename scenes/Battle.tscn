@@ -182,5 +182,15 @@ theme = ExtResource("1_bdmed")
 value = 100.0
 show_percentage = false
 
+[node name="Container" type="MarginContainer" parent="BattleLayout/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_bottom = 36
+
+[node name="PlayerSprite" type="Sprite2D" parent="BattleLayout/MarginContainer/Container"]
+position = Vector2(48, -12)
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(160, 90)

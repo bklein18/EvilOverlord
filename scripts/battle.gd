@@ -5,6 +5,7 @@ extends Node2D
 
 @onready var player_name_label = $BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer2/PlayerNameLabel
 @onready var player_level_label = $BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer2/PlayerLevelLabel
+@onready var player_sprite = $BattleLayout/MarginContainer/Container/PlayerSprite
 
 @onready var camera_2d = $Camera2D
 @export var enemy_minions: Array = [Minions.Minion.new()]
@@ -25,6 +26,7 @@ func _ready():
 	current_enemy_minion = enemy_minions[0]
 	player_name_label.text = current_player_minion.Name
 	player_level_label.text = "LV. " + str(current_player_minion.Level)
+	player_sprite.texture = load("res://assets/minions/" + current_player_minion.Name + ".png")
 	camera_2d.make_current()
 	
 func set_wild_minion(minion: Minions.Minion):

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://v7eh2ushphow"
-path="res://.godot/imported/DaveTheBandit.png-d121bb48c0f67e1ca7e1c8c298a6d946.ctex"
+path="res://.godot/imported/Dave.png-06291caa6cbcc3480adf44c5fd2f0b48.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/minions/DaveTheBandit.png"
-dest_files=["res://.godot/imported/DaveTheBandit.png-d121bb48c0f67e1ca7e1c8c298a6d946.ctex"]
+source_file="res://assets/minions/Dave.png"
+dest_files=["res://.godot/imported/Dave.png-06291caa6cbcc3480adf44c5fd2f0b48.ctex"]
 
 [params]
 
@@ -25,7 +25,7 @@ mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
-process/fix_alpha_border=true
+process/fix_alpha_border=false
 process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
