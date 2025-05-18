@@ -1,3 +1,5 @@
+CollisionPolygon2D
+Area2D
 TileMapDual
 MarginContainer
 Label
@@ -11,4 +13,3 @@ Camera2D
 CollisionShape2D
 Sprite2D
 CharacterBody2D
-Node2D
