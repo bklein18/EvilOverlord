@@ -2,6 +2,7 @@ extends Node2D
 
 @onready var enemy_name_label = $BattleLayout/MarginContainer/EnemyInfo/MarginContainer/VBoxContainer/HBoxContainer2/EnemyNameLabel
 @onready var enemy_level_label = $BattleLayout/MarginContainer/EnemyInfo/MarginContainer/VBoxContainer/HBoxContainer2/EnemyLevelLabel
+@onready var enemy_sprite = $BattleLayout/MarginContainer/EnemySpriteContainer/EnemySprite
 
 @onready var player_name_label = $BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer2/PlayerNameLabel
 @onready var player_level_label = $BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer2/PlayerLevelLabel
@@ -76,6 +77,7 @@ func _input(event):
 
 func set_wild_minion(minion: Minions.Minion):
 	current_enemy_minion = minion
+	enemy_sprite.texture = load("res://assets/minions/" + current_enemy_minion.Name + ".png")
 	show_text_and_wait_for_input("A wild " + minion.get_minion_name(minion.EnumVal) + " appeared!")
 
 func _on_command_pressed():

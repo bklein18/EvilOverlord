@@ -272,6 +272,16 @@ theme_override_constants/margin_bottom = 36
 [node name="PlayerSprite" type="Sprite2D" parent="BattleLayout/MarginContainer/Container"]
 position = Vector2(48, -12)
 
+[node name="EnemySpriteContainer" type="MarginContainer" parent="BattleLayout/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 36
+
+[node name="EnemySprite" type="Sprite2D" parent="BattleLayout/MarginContainer/EnemySpriteContainer"]
+position = Vector2(0, 36)
+
 [node name="InfoTextBox" type="PanelContainer" parent="BattleLayout/MarginContainer"]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
