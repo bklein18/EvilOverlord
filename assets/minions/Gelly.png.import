@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c2q3ccebfr2oc"
-path="res://.godot/imported/Gelatinous Cube.png-fc1d878a7f7639f46256900d2071fbc9.ctex"
+path="res://.godot/imported/Gelly.png-0157e859aee114e191707dd64c86f02c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/minions/Gelatinous Cube.png"
-dest_files=["res://.godot/imported/Gelatinous Cube.png-fc1d878a7f7639f46256900d2071fbc9.ctex"]
+source_file="res://assets/minions/Gelly.png"
+dest_files=["res://.godot/imported/Gelly.png-0157e859aee114e191707dd64c86f02c.ctex"]
 
 [params]
 

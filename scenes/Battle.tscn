@@ -282,34 +282,6 @@ theme_override_constants/margin_right = 36
 [node name="EnemySprite" type="Sprite2D" parent="BattleLayout/MarginContainer/EnemySpriteContainer"]
 position = Vector2(0, 36)
 
-[node name="InfoTextBox" type="PanelContainer" parent="BattleLayout/MarginContainer"]
-custom_minimum_size = Vector2(0, 36)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 8
-
-[node name="MarginContainer" type="MarginContainer" parent="BattleLayout/MarginContainer/InfoTextBox"]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_right = 26
-
-[node name="HBoxContainer" type="HBoxContainer" parent="BattleLayout/MarginContainer/InfoTextBox/MarginContainer"]
-layout_mode = 2
-
-[node name="InfoText" type="Label" parent="BattleLayout/MarginContainer/InfoTextBox/MarginContainer/HBoxContainer"]
-layout_mode = 2
-text = "INFO TEXT"
-
-[node name="RichTextLabel" type="RichTextLabel" parent="BattleLayout/MarginContainer/InfoTextBox/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(20, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-bbcode_enabled = true
-text = "[center][color=white][pulse color=#ffffff40 frequency=1.0 ease=-2.0]→[/pulse][/color][/center]"
-fit_content = true
-scroll_active = false
-
 [node name="MinionPanel" type="MarginContainer" parent="BattleLayout/MarginContainer"]
 visible = false
 layout_mode = 2
@@ -344,10 +316,13 @@ text = "←"
 [node name="ScrollContainer" type="ScrollContainer" parent="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+scroll_vertical_custom_step = 2.0
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer"]
 layout_mode = 2
-theme_override_constants/separation = 40
+theme_override_constants/separation = 0
 
 [node name="MinionPreview" parent="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_2rusm")]
 layout_mode = 2
@@ -369,6 +344,34 @@ layout_mode = 2
 [node name="MinionPreview6" parent="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_2rusm")]
 layout_mode = 2
 
+[node name="InfoTextBox" type="PanelContainer" parent="BattleLayout/MarginContainer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleLayout/MarginContainer/InfoTextBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 26
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BattleLayout/MarginContainer/InfoTextBox/MarginContainer"]
+layout_mode = 2
+
+[node name="InfoText" type="Label" parent="BattleLayout/MarginContainer/InfoTextBox/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "INFO TEXT"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="BattleLayout/MarginContainer/InfoTextBox/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+bbcode_enabled = true
+text = "[center][color=white][pulse color=#ffffff40 frequency=1.0 ease=-2.0]→[/pulse][/color][/center]"
+fit_content = true
+scroll_active = false
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(160, 90)
 
@@ -377,8 +380,11 @@ position = Vector2(160, 90)
 [connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/ControlPanel/MarginContainer/GridContainer/Item" to="." method="_on_item_pressed"]
 [connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/ControlPanel/MarginContainer/GridContainer/Retreat" to="." method="_on_retreat_pressed"]
 [connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer/MoveBack" to="." method="_on_move_back_pressed"]
-[connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer/GridContainer/Move1" to="." method="_on_command_pressed"]
-[connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer/GridContainer/Move2" to="." method="_on_minions_pressed"]
-[connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer/GridContainer/Move3" to="." method="_on_item_pressed"]
-[connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer/GridContainer/Move4" to="." method="_on_retreat_pressed"]
 [connection signal="pressed" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/MinionBack" to="." method="_on_minion_back_pressed"]
+[connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview" to="." method="_on_minion_preview_minion_clicked"]
+[connection signal="mouse_entered" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview" to="." method="_on_minion_preview_mouse_entered"]
+[connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview2" to="." method="_on_minion_preview_2_minion_clicked"]
+[connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview3" to="." method="_on_minion_preview_3_minion_clicked"]
+[connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview4" to="." method="_on_minion_preview_4_minion_clicked"]
+[connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview5" to="." method="_on_minion_preview_5_minion_clicked"]
+[connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview6" to="." method="_on_minion_preview_6_minion_clicked"]

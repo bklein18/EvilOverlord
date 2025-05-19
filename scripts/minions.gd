@@ -26,11 +26,11 @@ class Minion:
 	var Level: int = 0
 	var Current_Health: int = 10
 	var Max_Health: int = 10
-	var Attack: int = 1
-	var Defense: int = 1
-	var Magic_Attack: int = 1
-	var Magic_Defense: int = 1
-	var Speed: int = 1
+	var Attack: int = 10
+	var Defense: int = 10
+	var Magic_Attack: int = 10
+	var Magic_Defense: int = 10
+	var Speed: int = 10
 	var Luck: float = 0.1
 	var Number: int = 0
 
@@ -39,9 +39,9 @@ class Minion:
 		Dave,
 		Zulio,
 		Skelly,
-		Gelatinous_Cube,
+		Gelly,
 		Phyll,
-		Yyx_yll,
+		Yyxyll,
 		The_One_Who_Waits,
 		Dhal,
 		Eemini,
@@ -69,12 +69,12 @@ class Minion:
 				return "Zulio"
 			Minions.Skelly:
 				return "Skelly"
-			Minions.Gelatinous_Cube:
-				return "Gelatinous Cube"
+			Minions.Gelly:
+				return "Gelly"
 			Minions.Phyll:
 				return "Phyll"
-			Minions.Yyx_yll:
-				return "Yyx'yll"
+			Minions.Yyxyll:
+				return "Yyxyll"
 			Minions.The_One_Who_Waits:
 				return "The One Who Waits"
 			Minions.Dhal:
@@ -95,11 +95,11 @@ class Minion:
 				return [Types.Demon]
 			Minions.Skelly:
 				return [Types.Undead]
-			Minions.Gelatinous_Cube:
+			Minions.Gelly:
 				return [Types.Ooze]
 			Minions.Phyll:
 				return [Types.Plant]
-			Minions.Yyx_yll:
+			Minions.Yyxyll:
 				return [Types.Cthonic]
 			Minions.The_One_Who_Waits:
 				return [Types.Fey]
@@ -114,11 +114,11 @@ class Minion:
 				
 	func get_minion_level_range(minion: Minions.Minion.Minions) -> Array:
 		match minion:
-			Minions.Gelatinous_Cube:
+			Minions.Gelly:
 				return range(3, 6)
 			Minions.Phyll:
 				return range(1, 5)
-			Minions.Yyx_yll:
+			Minions.Yyxyll:
 				return range(3, 6)
 			Minions.The_One_Who_Waits:
 				return range(5, 8)
@@ -141,7 +141,7 @@ class Minion:
 				return {
 					1: Move.move_object_from_enum(Move.Moves.Charge)
 				}
-			Minions.Gelatinous_Cube:
+			Minions.Gelly:
 				return {
 					1: Move.move_object_from_enum(Move.Moves.Charge)
 				}
@@ -149,7 +149,7 @@ class Minion:
 				return {
 					1: Move.move_object_from_enum(Move.Moves.Charge)
 				}
-			Minions.Yyx_yll:
+			Minions.Yyxyll:
 				return {
 					1: Move.move_object_from_enum(Move.Moves.Charge)
 				}
