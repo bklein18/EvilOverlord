@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://baah4keidadhd"]
+[gd_scene load_steps=8 format=3 uid="uid://baah4keidadhd"]
 
 [ext_resource type="Script" uid="uid://jk3p6c0shujj" path="res://scripts/battle.gd" id="1_0448q"]
 [ext_resource type="Theme" uid="uid://doim5rcwhni0d" path="res://assets/game_theme.tres" id="1_bdmed"]
@@ -17,6 +17,17 @@ func _ready():
 bg_color = Color(0, 0.513726, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2rusm"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6grd4"]
 bg_color = Color(0, 0, 0, 1)
 border_width_left = 2
 border_width_top = 2
@@ -317,8 +328,6 @@ text = "←"
 layout_mode = 2
 size_flags_horizontal = 3
 scroll_vertical_custom_step = 2.0
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer"]
 layout_mode = 2
@@ -344,7 +353,47 @@ layout_mode = 2
 [node name="MinionPreview6" parent="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("3_2rusm")]
 layout_mode = 2
 
+[node name="ItemPanel" type="MarginContainer" parent="BattleLayout/MarginContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Panel" type="Panel" parent="BattleLayout/MarginContainer/ItemPanel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6grd4")
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleLayout/MarginContainer/ItemPanel/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BattleLayout/MarginContainer/ItemPanel/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="ItemBack" type="Button" parent="BattleLayout/MarginContainer/ItemPanel/Panel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "←"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="BattleLayout/MarginContainer/ItemPanel/Panel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+scroll_vertical_custom_step = 2.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattleLayout/MarginContainer/ItemPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer"]
+layout_mode = 2
+
 [node name="InfoTextBox" type="PanelContainer" parent="BattleLayout/MarginContainer"]
+visible = false
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -388,3 +437,4 @@ position = Vector2(160, 90)
 [connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview4" to="." method="_on_minion_preview_4_minion_clicked"]
 [connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview5" to="." method="_on_minion_preview_5_minion_clicked"]
 [connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview6" to="." method="_on_minion_preview_6_minion_clicked"]
+[connection signal="pressed" from="BattleLayout/MarginContainer/ItemPanel/Panel/MarginContainer/HBoxContainer/ItemBack" to="." method="_on_item_back_pressed"]

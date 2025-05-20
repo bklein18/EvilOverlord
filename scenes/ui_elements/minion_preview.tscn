@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://cb0gj2t6o8vxr"]
 
-[ext_resource type="Script" uid="uid://cvne8sjgp2vdk" path="res://scenes/ui_elements/minion_preview.gd" id="1_o55tn"]
+[ext_resource type="Script" uid="uid://cvne8sjgp2vdk" path="res://scripts/ui_elements/minion_preview.gd" id="1_o55tn"]
 [ext_resource type="Texture2D" uid="uid://v7eh2ushphow" path="res://assets/minions/Dave.png" id="1_xc6xa"]
 [ext_resource type="Theme" uid="uid://doim5rcwhni0d" path="res://assets/game_theme.tres" id="2_o55tn"]
 
-[node name="MarginContainer" type="MarginContainer"]
+[node name="MinionPreview" type="MarginContainer"]
 offset_right = 159.0
 offset_bottom = 36.0
 script = ExtResource("1_o55tn")

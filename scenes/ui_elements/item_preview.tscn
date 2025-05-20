@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://2oburbhsx765"]
+
+[ext_resource type="Theme" uid="uid://doim5rcwhni0d" path="res://assets/game_theme.tres" id="1_arw17"]
+[ext_resource type="Script" uid="uid://srlulaof3gkj" path="res://scripts/ui_elements/item_preview.gd" id="1_qm6eq"]
+
+[node name="ItemPreview" type="MarginContainer"]
+script = ExtResource("1_qm6eq")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ItemName" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_arw17")
+
+[node name="Dash" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_arw17")
+text = "-"
+
+[node name="QuantityAvailable" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_arw17")
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

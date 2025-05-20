@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 DI="*res://addons/DependencyInjection/DI.gd"
 Minions="*res://scripts/minions.gd"
+Items="*res://scripts/items.gd"
 SceneManager="*res://scripts/scene_manager.gd"
 
 [display]

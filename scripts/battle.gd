@@ -35,12 +35,18 @@ extends Node2D
 @onready var minion_preview_5 = $BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview5
 @onready var minion_preview_6 = $BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview6
 
-
 @onready var minion_previews = [minion_preview, minion_preview_2, minion_preview_3, minion_preview_4, minion_preview_5, minion_preview_6]
+
+@onready var item_panel = $BattleLayout/MarginContainer/ItemPanel
+@onready var item_back = $BattleLayout/MarginContainer/ItemPanel/Panel/MarginContainer/HBoxContainer/ItemBack
+@onready var item_container = $BattleLayout/MarginContainer/ItemPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer
+
+@onready var item_previews = []
 
 @onready var camera_2d = $Camera2D
 @export var enemy_minions: Array = [Minions.Minion.new()]
 @export var player_minions: Array = SceneManager.party
+@export var player_inventory: Array = SceneManager.inventory
 var current_enemy_minion: Minions.Minion = Minions.Minion.new():
 	set(new_minion):
 		current_enemy_minion = new_minion
@@ -80,6 +86,13 @@ func _ready():
 	camera_2d.make_current()
 	info_text.text = ""
 	arrow_prompt.hide()
+	
+	for item in  player_inventory:
+		if item.CurrentQuantity > 0:
+			var new_item_preview = load("res://scenes/ui_elements/item_preview.tscn").instantiate()
+			new_item_preview.item = item
+			item_container.add_child(new_item_preview)
+			item_previews.append(new_item_preview)
 
 func set_active_player_minion(to: Minions.Minion):
 	disable_buttons()
@@ -154,7 +167,12 @@ func _on_minion_back_pressed():
 	minion_panel.hide()
 
 func _on_item_pressed():
-	pass # Replace with function body.
+	item_panel.show()
+	for item in item_previews:
+		item.item_clicked.connect(player_item_selected)
+
+func _on_item_back_pressed():
+	item_panel.hide()
 
 func _on_retreat_pressed():
 	if !retreat.disabled:
@@ -179,7 +197,7 @@ func show_text_with_auto_timeout(text: String):
 	info_text_box.hide()
 	enable_buttons()
 	info_text.text = ""
-	
+
 func show_text_and_wait_for_input(text: String):
 	disable_buttons()
 	info_text_box.show()
@@ -190,7 +208,6 @@ func show_text_and_wait_for_input(text: String):
 	info_text_box.hide()
 	enable_buttons()
 	info_text.text = ""
-	
 
 func disable_buttons():
 	command.disabled = true
@@ -215,10 +232,30 @@ func player_minion_changed(minion: Minions.Minion):
 		minion_panel.hide()
 		await set_active_player_minion(minion)
 		player_turn = false
-	
+
 func player_move_selected(move: Minions.Move):
 	move_panel.hide()
 	control_panel.show()
 	await show_text_and_wait_for_input(current_player_minion.Name + " used " + move.name + "!")
+	enable_buttons()
+	player_turn = false
+
+func player_item_selected(item: Items.Item):
+	item_panel.hide()
+	var offset = player_inventory.find(item)
+	player_inventory[offset].CurrentQuantity -= 1
+	item_previews[offset].item = player_inventory[offset]
+	var items_to_pop = []
+	for i in player_inventory:
+		if i.CurrentQuantity <= 0:
+			for index in range(item_previews.size()):
+				if item_previews[index].item.Name == i.Name:
+					items_to_pop.append(item_previews[index])
+	for i in items_to_pop:
+		var index = item_previews.find(i)
+		item_container.remove_child(i)
+		item_previews.pop_at(index)
+		player_inventory.pop_at(index)
+	await show_text_and_wait_for_input("You used " + item.Name + "!")
 	enable_buttons()
 	player_turn = false
