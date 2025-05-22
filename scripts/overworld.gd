@@ -3,6 +3,7 @@ class_name Overworld
 
 @onready var tall_grass = $TallGrass
 @onready var player = $Player
+@onready var audio_stream_player_2d = $AudioStreamPlayer2D
 
 static var _instance: Overworld = null
 
@@ -44,10 +45,12 @@ func _on_player_encounter_triggered(encountered_minion):
 	var battle_scene = load("res://scenes/Battle.tscn").instantiate()
 	get_tree().root.add_child(battle_scene)
 	self.hide()
+	audio_stream_player_2d.stop()
 	player.hide()
 	battle_scene.set_wild_minion(minion)
 	await battle_scene.battle_finished
 	self.show()
+	audio_stream_player_2d.play()
 	player.show()
 	player.camera.make_current()
 	get_tree().root.remove_child(battle_scene)

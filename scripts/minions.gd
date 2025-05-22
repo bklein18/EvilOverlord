@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 
 static func wild_minion_from_enum(enum_val: Minion.Minions) -> Minion:
 	var new = Minions.Minion.new()
@@ -33,7 +33,75 @@ class Minion:
 	var Speed: int = 10
 	var Luck: float = 0.1
 	var Number: int = 0
-
+	
+	# max boost increase is 40% above base stats (stored in -4 to 4 range)
+	# if boosts are increased when at the cap, increase duration by 2 turns
+	# any boost lasts for 5 turns by default
+	var attack_boost_turns_remaining: int = 0
+	var attack_boost_amount: int = 0:
+		set(new_value):
+			attack_boost_amount += new_value
+			if attack_boost_amount >= 4:
+				attack_boost_amount = 4
+			elif attack_boost_amount <= -4:
+				attack_boost_amount = -4
+	var magic_attack_boost_turns_remaining: int = 0
+	var magic_attack_boost_amount: int = 0:
+		set(new_value):
+			magic_attack_boost_amount += new_value
+			if magic_attack_boost_amount >= 4:
+				magic_attack_boost_amount = 4
+			elif magic_attack_boost_amount <= -4:
+				magic_attack_boost_amount = -4
+	var defense_boost_turns_remaining: int = 0
+	var defense_boost_amount: int = 0:
+		set(new_value):
+			defense_boost_amount += new_value
+			if defense_boost_amount >= 4:
+				defense_boost_amount = 4
+			elif defense_boost_amount <= -4:
+				defense_boost_amount = -4
+	var magic_defense_boost_turns_remaining: int = 0
+	var magic_defense_boost_amount: int = 0:
+		set(new_value):
+			magic_defense_boost_amount += new_value
+			if magic_defense_boost_amount >= 4:
+				magic_defense_boost_amount = 4
+			elif magic_defense_boost_amount <= -4:
+				magic_defense_boost_amount = -4
+	var speed_boost_turns_remaining: int = 0
+	var speed_boost_amount: int = 0
+	
+	func adjusted_attack() -> int:
+		if attack_boost_turns_remaining > 0:
+			return self.Attack * (1.0 + (attack_boost_amount / 10.0))
+		else:
+			return self.Attack
+	
+	func adjusted_magic_attack() -> int:
+		if magic_attack_boost_turns_remaining > 0:
+			return self.Magic_Attack * (1.0 + (magic_attack_boost_amount / 10.0))
+		else:
+			return self.Magic_Attack
+	
+	func adjusted_defense() -> int:
+		if defense_boost_turns_remaining > 0:
+			return self.Defense * (1.0 + (defense_boost_amount / 10.0))
+		else:
+			return self.Defense
+	
+	func adjusted_magic_defense() -> int:
+		if magic_defense_boost_turns_remaining > 0:
+			return self.Magic_Defense * (1.0 + (magic_defense_boost_amount / 10.0))
+		else:
+			return self.Magic_Defense
+	
+	func adjusted_speed() -> int:
+		if speed_boost_turns_remaining > 0:
+			return self.Speed * (1.0 + (speed_boost_amount / 10.0))
+		else:
+			return self.Speed
+	
 	enum Minions {
 		None,
 		Dave,
@@ -60,6 +128,46 @@ class Minion:
 		Goblin,
 		Beast
 	}
+	
+	# Attack returns the amount of damage after attack stat increase
+	# Defense returns 0 if the defense buff was allowed, 1 if the defense couldn't go any higher
+	func perform(move: Move) -> int:
+		match move.category:
+			Move.Category.Attack:
+				return move.base_val * self.adjusted_attack()
+			Move.Category.Defense:
+				if defense_boost_amount == 4:
+					defense_boost_turns_remaining += 2
+					return 1
+				else:
+					defense_boost_amount += move.base_val
+					return 0
+			Move.Category.Defense_Debuff:
+				if defense_boost_amount == -4:
+					defense_boost_turns_remaining += 2
+					return 1
+				else:
+					defense_boost_amount -= move.base_val
+					return 0
+			Move.Category.Magic_Attack:
+				return move.base_val * self.adjusted_magic_attack()
+			Move.Category.Magic_Defense:
+				if magic_defense_boost_amount == 4:
+					magic_defense_boost_turns_remaining += 2
+					return 1
+				else:
+					magic_defense_boost_amount += move.base_val
+					return 0
+			Move.Category.Magic_Defense_Debuff:
+				if magic_defense_boost_amount == -4:
+					magic_defense_boost_turns_remaining += 2
+					return 1
+				else:
+					magic_defense_boost_amount -= move.base_val
+					return 0
+			_:
+				print("special")
+				return 0
 
 	func get_minion_name(minion: Minions.Minion.Minions) -> String:
 		match minion:
@@ -181,9 +289,13 @@ class Move:
 	
 	enum Category {
 		Attack,
+		Attack_Buff,
 		Defense,
+		Defense_Debuff,
 		Magic_Attack,
+		Magic_Attack_Buff,
 		Magic_Defense,
+		Magic_Defense_Debuff,
 		Special
 	}
 	

@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://hagblmj1vq7w"]
+[gd_scene load_steps=6 format=3 uid="uid://hagblmj1vq7w"]
 
 [ext_resource type="Script" uid="uid://bkhmovur31trf" path="res://scripts/overworld.gd" id="1_gacct"]
 [ext_resource type="PackedScene" uid="uid://bf745t0m773wm" path="res://scenes/FieldTileset.tscn" id="1_puia7"]
 [ext_resource type="PackedScene" uid="uid://c35lc1budf0wp" path="res://scenes/TallGrassTileset.tscn" id="2_gacct"]
 [ext_resource type="PackedScene" uid="uid://j0co65ryx40r" path="res://scenes/Player.tscn" id="2_puia7"]
+[ext_resource type="AudioStream" uid="uid://4kv4wokug4gu" path="res://assets/music/Overworld.wav" id="5_w51ix"]
 
 [node name="Overworld" type="Node2D"]
 script = ExtResource("1_gacct")
@@ -15,5 +16,9 @@ position = Vector2(0, -1)
 
 [node name="Player" parent="." instance=ExtResource("2_puia7")]
 position = Vector2(434, 190)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_w51ix")
+autoplay = true
 
 [connection signal="encounter_triggered" from="Player" to="." method="_on_player_encounter_triggered"]

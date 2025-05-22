@@ -3,6 +3,7 @@ extends Node2D
 @onready var enemy_name_label = $BattleLayout/MarginContainer/EnemyInfo/MarginContainer/VBoxContainer/HBoxContainer2/EnemyNameLabel
 @onready var enemy_level_label = $BattleLayout/MarginContainer/EnemyInfo/MarginContainer/VBoxContainer/HBoxContainer2/EnemyLevelLabel
 @onready var enemy_sprite = $BattleLayout/MarginContainer/EnemySpriteContainer/EnemySprite
+@onready var enemy_hp_bar = $BattleLayout/MarginContainer/EnemyInfo/MarginContainer/VBoxContainer/HBoxContainer/ProgressBar
 
 @onready var player_info = $BattleLayout/MarginContainer/VBoxContainer/PlayerInfo
 @onready var player_name_label = $BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer2/PlayerNameLabel
@@ -52,6 +53,8 @@ var current_enemy_minion: Minions.Minion = Minions.Minion.new():
 		current_enemy_minion = new_minion
 		enemy_name_label.text = new_minion.Name
 		enemy_level_label.text = "LV. " + str(new_minion.Level)
+		enemy_hp_bar.max_value = current_enemy_minion.Max_Health
+		enemy_hp_bar.value = current_enemy_minion.Current_Health
 	get:
 		return current_enemy_minion
 var current_player_minion: Minions.Minion = player_minions[0]
@@ -111,6 +114,7 @@ func set_active_player_minion(to: Minions.Minion):
 func enemy_turn():
 	var selected_move = current_enemy_minion.Moves[(randi() % current_enemy_minion.Moves.size()) - 1]
 	await show_text_and_wait_for_input("Enemy " + current_enemy_minion.Name + " used " + selected_move.name + "!")
+	enemy_move_selected(selected_move)
 	player_turn = true
 
 func _input(event):
@@ -195,7 +199,6 @@ func show_text_with_auto_timeout(text: String):
 	info_text.text = text
 	await wait(2.5)
 	info_text_box.hide()
-	enable_buttons()
 	info_text.text = ""
 
 func show_text_and_wait_for_input(text: String):
@@ -206,7 +209,6 @@ func show_text_and_wait_for_input(text: String):
 	await player_input
 	arrow_prompt.hide()
 	info_text_box.hide()
-	enable_buttons()
 	info_text.text = ""
 
 func disable_buttons():
@@ -236,9 +238,82 @@ func player_minion_changed(minion: Minions.Minion):
 func player_move_selected(move: Minions.Move):
 	move_panel.hide()
 	control_panel.show()
+	disable_buttons()
+	var result = current_player_minion.perform(move)
 	await show_text_and_wait_for_input(current_player_minion.Name + " used " + move.name + "!")
-	enable_buttons()
+	match move.category:
+		Minions.Move.Category.Attack, Minions.Move.Category.Magic_Attack:
+			await damage_enemy(current_enemy_minion, result, move.category)
+			await wait(0.5)
+		Minions.Move.Category.Defense, Minions.Move.Category.Magic_Defense:
+			if result == 0:
+				var defense_boost_amt = "up" if move.base_val == 1 else "way up"
+				var defense_type = "defense" if move.catergory == Minions.Move.Category.Defense else "magic defense"
+				await show_text_and_wait_for_input(current_player_minion.Name + "'s " + defense_type + " went " + defense_boost_amt)
+			else:
+				var defense_type = "defense" if move.catergory == Minions.Move.Category.Defense else "magic defense"
+				await show_text_and_wait_for_input(current_player_minion.Name + "'s " + defense_type + " can't go any higher!")
+		Minions.Move.Category.Defense_Debuff, Minions.Move.Category.Magic_Defense_Debuff:
+			if result == 0:
+				var defense_boost_amt = "down" if move.base_val == 1 else "way down"
+				var defense_type = "defense" if move.catergory == Minions.Move.Category.Defense else "magic defense"
+				await show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " went " + defense_boost_amt)
+			else:
+				var defense_type = "defense" if move.catergory == Minions.Move.Category.Defense else "magic defense"
+				await show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " can't go any lower!")
+		_:
+			pass
 	player_turn = false
+
+func damage_enemy(minion: Minions.Minion, amount: int, category: Minions.Move.Category):
+		var defense_val = minion.adjusted_defense() if category == Minions.Move.Category.Defense else minion.adjusted_magic_defense()
+		var tween = create_tween()
+		minion.Current_Health -= (amount * (1.0 - (float(100 - defense_val) / 100.0)))
+		var new_hp_val = minion.Current_Health
+		tween.tween_property(enemy_hp_bar, "value", new_hp_val, 0.2)
+
+func heal_enemy(minion: Minions.Minion, amount: int):
+		var tween = create_tween()
+		minion.Current_Health += amount
+		tween.tween_property(enemy_hp_bar, "value", minion.Current_Health + amount, 0.2)
+
+func enemy_move_selected(move: Minions.Move):
+	var result = current_enemy_minion.perform(move)
+	match move.category:
+		Minions.Move.Category.Attack, Minions.Move.Category.Magic_Attack:
+			await damage_player(current_player_minion, result, move.category)
+			await wait(0.5)
+		Minions.Move.Category.Defense, Minions.Move.Category.Magic_Defense:
+			if result == 0:
+				var defense_boost_amt = "up" if move.base_val == 1 else "way up"
+				var defense_type = "defense" if move.catergory == Minions.Move.Category.Defense else "magic defense"
+				await show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " went " + defense_boost_amt)
+			else:
+				var defense_type = "defense" if move.catergory == Minions.Move.Category.Defense else "magic defense"
+				await show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " can't go any higher!")
+		Minions.Move.Category.Defense_Debuff, Minions.Move.Category.Magic_Defense_Debuff:
+			if result == 0:
+				var defense_boost_amt = "down" if move.base_val == 1 else "way down"
+				var defense_type = "defense" if move.catergory == Minions.Move.Category.Defense else "magic defense"
+				await show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " went " + defense_boost_amt)
+			else:
+				var defense_type = "defense" if move.catergory == Minions.Move.Category.Defense else "magic defense"
+				await show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " can't go any lower!")
+		_:
+			pass
+
+func damage_player(minion: Minions.Minion, amount: int, category: Minions.Move.Category):
+		var defense_val = minion.adjusted_defense() if category == Minions.Move.Category.Defense else minion.adjusted_magic_defense()
+		var tween = create_tween()
+		minion.Current_Health -= (amount * (1.0 - (float(100 - defense_val) / 100.0)))
+		var new_hp_val = minion.Current_Health
+		tween.tween_property(player_hp_bar, "value", new_hp_val, 0.2)
+
+func heal_player(minion: Minions.Minion, amount: int):
+		var tween = create_tween()
+		minion.Current_Health += amount
+		tween.tween_property(player_hp_bar, "value", minion.Current_Health + amount, 0.2)
+		await tween.finished
 
 func player_item_selected(item: Items.Item):
 	item_panel.hide()
