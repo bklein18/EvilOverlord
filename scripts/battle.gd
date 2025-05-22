@@ -71,6 +71,7 @@ var player_hp_amount: int = player_minions[0].Current_Health:
 
 var player_turn := false:
 	set(new_value):
+		check_for_battle_win()
 		if !new_value:
 			disable_buttons()
 			await enemy_turn()
@@ -345,3 +346,19 @@ func player_item_selected(item: Items.Item):
 	await show_text_and_wait_for_input("You used " + item.Name + "!")
 	enable_buttons()
 	player_turn = false
+
+func check_for_battle_win():
+	disable_buttons()
+	var player_minion_hp_above_zero = player_minions.filter(func(minion):
+		return minion.Current_Health > 0
+	)
+	if current_enemy_minion.Current_Health == 0:
+		await show_text_and_wait_for_input(current_enemy_minion.Name + " was killed!")
+		if current_player_minion.Current_Health == 0 and player_minion_hp_above_zero.size() > 0:
+			await show_text_and_wait_for_input(current_player_minion.Name + " was killed!")
+			await show_text_and_wait_for_input("Send next minion?")
+		battle_finished.emit()
+	if current_player_minion.Current_Health == 0 and player_minion_hp_above_zero.size() > 0:
+		await show_text_and_wait_for_input(current_player_minion.Name + " was killed!")
+		await show_text_and_wait_for_input("Send next minion?")
+		battle_finished.emit()
