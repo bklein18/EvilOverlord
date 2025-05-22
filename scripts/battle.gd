@@ -64,6 +64,11 @@ var wait_for_input := false
 
 var is_wild_encounter := false
 
+var player_hp_amount: int = player_minions[0].Current_Health:
+	set(new_value):
+		player_hp_amount = new_value if new_value >= 0 else 0
+		player_hp_label.text = str(player_hp_amount) + "/" + str(current_player_minion.Max_Health)
+
 var player_turn := false:
 	set(new_value):
 		if !new_value:
@@ -308,6 +313,7 @@ func damage_player(minion: Minions.Minion, amount: int, category: Minions.Move.C
 		minion.Current_Health -= (amount * (1.0 - (float(100 - defense_val) / 100.0)))
 		var new_hp_val = minion.Current_Health
 		tween.tween_property(player_hp_bar, "value", new_hp_val, 0.2)
+		tween.parallel().tween_property(self, "player_hp_amount", new_hp_val, 0.2)
 
 func heal_player(minion: Minions.Minion, amount: int):
 		var tween = create_tween()
