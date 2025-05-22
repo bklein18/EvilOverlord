@@ -85,6 +85,8 @@ var player_turn := false:
 signal battle_finished
 signal player_input
 
+const ANIMATION_SPEED = 0.4
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if enemy_minions.size() < 1:
@@ -119,7 +121,7 @@ func set_active_player_minion(to: Minions.Minion):
 func enemy_turn():
 	var selected_move = current_enemy_minion.Moves[(randi() % current_enemy_minion.Moves.size()) - 1]
 	await show_text_and_wait_for_input("Enemy " + current_enemy_minion.Name + " used " + selected_move.name + "!")
-	enemy_move_selected(selected_move)
+	await enemy_move_selected(selected_move)
 	player_turn = true
 
 func _input(event):
@@ -275,12 +277,14 @@ func damage_enemy(minion: Minions.Minion, amount: int, category: Minions.Move.Ca
 		var tween = create_tween()
 		minion.Current_Health -= (amount * (1.0 - (float(100 - defense_val) / 100.0)))
 		var new_hp_val = minion.Current_Health
-		tween.tween_property(enemy_hp_bar, "value", new_hp_val, 0.2)
+		tween.tween_property(enemy_hp_bar, "value", new_hp_val, ANIMATION_SPEED)
+		await tween.finished
 
 func heal_enemy(minion: Minions.Minion, amount: int):
 		var tween = create_tween()
 		minion.Current_Health += amount
-		tween.tween_property(enemy_hp_bar, "value", minion.Current_Health + amount, 0.2)
+		tween.tween_property(enemy_hp_bar, "value", minion.Current_Health + amount, ANIMATION_SPEED)
+		await tween.finished
 
 func enemy_move_selected(move: Minions.Move):
 	var result = current_enemy_minion.perform(move)
@@ -312,13 +316,14 @@ func damage_player(minion: Minions.Minion, amount: int, category: Minions.Move.C
 		var tween = create_tween()
 		minion.Current_Health -= (amount * (1.0 - (float(100 - defense_val) / 100.0)))
 		var new_hp_val = minion.Current_Health
-		tween.tween_property(player_hp_bar, "value", new_hp_val, 0.2)
-		tween.parallel().tween_property(self, "player_hp_amount", new_hp_val, 0.2)
+		tween.tween_property(player_hp_bar, "value", new_hp_val, ANIMATION_SPEED)
+		tween.parallel().tween_property(self, "player_hp_amount", new_hp_val, ANIMATION_SPEED)
+		await tween.finished
 
 func heal_player(minion: Minions.Minion, amount: int):
 		var tween = create_tween()
 		minion.Current_Health += amount
-		tween.tween_property(player_hp_bar, "value", minion.Current_Health + amount, 0.2)
+		tween.tween_property(player_hp_bar, "value", minion.Current_Health + amount, ANIMATION_SPEED)
 		await tween.finished
 
 func player_item_selected(item: Items.Item):
