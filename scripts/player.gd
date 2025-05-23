@@ -25,6 +25,7 @@ var is_interaction_occurring = false
 @onready var camera = $Camera2D
 @onready var info_text_box = $Camera2D/Control/InfoTextBox
 @onready var pause_menu = $Camera2D/Control/PauseMenu
+@onready var minion_menu = $Camera2D/Control/MinionMenu
 
 var interaction_cooldown = false
 @onready var cooldown_timer = $CooldownTimer
@@ -36,19 +37,24 @@ func _ready():
 	position += Vector2.ONE * TILE_SIZE/2
 
 func _physics_process(_delta):
+	if not self.is_visible_in_tree():
+		return
+	
 	if moving or is_interaction_occurring:
 		return
 	
 	if Input.is_action_just_pressed("menu_back"):
 		if paused:
-			paused = false
-			pause_menu.hide()
-			cooldown_timer.start()
+			if minion_menu.is_visible_in_tree():
+				minion_menu.hide()
+			else:
+				paused = false
+				pause_menu.hide()
+				cooldown_timer.start()
 		else:
 			paused = true
 			pause_menu.show()
 	
-	if paused:
 		return
 	if Input.is_action_pressed("move_down"):
 		move("move_down")
@@ -106,7 +112,7 @@ func _on_cooldown_timer_timeout():
 	interaction_cooldown = false
 
 func _on_party_pressed():
-	print("party")
+	minion_menu.show()
 
 func _on_items_pressed():
 	print("items")

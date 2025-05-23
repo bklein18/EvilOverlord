@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://j0co65ryx40r"]
+[gd_scene load_steps=7 format=3 uid="uid://j0co65ryx40r"]
 
 [ext_resource type="Texture2D" uid="uid://gp0yvhk505ko" path="res://assets/Player.png" id="1_p0vlq"]
 [ext_resource type="Script" uid="uid://b3uy1elqmoeho" path="res://scripts/player.gd" id="1_v6fml"]
 [ext_resource type="PackedScene" uid="uid://cgpn26oog76so" path="res://scenes/ui_elements/info_text_box.tscn" id="3_3li8b"]
+[ext_resource type="PackedScene" uid="uid://bmnyil3u63alc" path="res://scenes/ui_elements/minion_menu.tscn" id="3_qu4a1"]
 [ext_resource type="PackedScene" uid="uid://1uvyq5x8mqw0" path="res://scenes/ui_elements/pause_menu.tscn" id="4_mdl7e"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v6fml"]
@@ -27,6 +28,14 @@ offset_top = -90.0
 offset_right = 160.0
 offset_bottom = 90.0
 
+[node name="PauseMenu" parent="Camera2D/Control" instance=ExtResource("4_mdl7e")]
+visible = false
+layout_mode = 1
+
+[node name="MinionMenu" parent="Camera2D/Control" instance=ExtResource("3_qu4a1")]
+visible = false
+layout_mode = 1
+
 [node name="InfoTextBox" parent="Camera2D/Control" instance=ExtResource("3_3li8b")]
 visible = false
 layout_mode = 1
@@ -36,10 +45,6 @@ anchor_bottom = 1.0
 offset_top = -36.0
 offset_right = 146.0
 grow_vertical = 0
-
-[node name="PauseMenu" parent="Camera2D/Control" instance=ExtResource("4_mdl7e")]
-visible = false
-layout_mode = 1
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 
