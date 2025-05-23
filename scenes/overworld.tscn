@@ -1,10 +1,12 @@
-[gd_scene load_steps=8 format=4 uid="uid://hagblmj1vq7w"]
+[gd_scene load_steps=10 format=4 uid="uid://hagblmj1vq7w"]
 
 [ext_resource type="Script" uid="uid://bkhmovur31trf" path="res://scripts/overworld.gd" id="1_gacct"]
 [ext_resource type="PackedScene" uid="uid://bf745t0m773wm" path="res://scenes/FieldTileset.tscn" id="1_puia7"]
 [ext_resource type="PackedScene" uid="uid://j0co65ryx40r" path="res://scenes/Player.tscn" id="2_puia7"]
 [ext_resource type="Texture2D" uid="uid://cpvl5kvom2npi" path="res://assets/TallGrassTileset.png" id="3_w51ix"]
 [ext_resource type="AudioStream" uid="uid://4kv4wokug4gu" path="res://assets/music/Overworld.wav" id="5_w51ix"]
+[ext_resource type="PackedScene" uid="uid://d2tyw4epf2sbv" path="res://scenes/npc.tscn" id="6_bos8a"]
+[ext_resource type="Texture2D" uid="uid://67fnv43sogra" path="res://assets/npcs/TestNecromancer.png" id="7_i5y0i"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bos8a"]
 texture = ExtResource("3_w51ix")
@@ -149,5 +151,9 @@ position = Vector2(434, 190)
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_w51ix")
 autoplay = true
+
+[node name="Necromancer" parent="." instance=ExtResource("6_bos8a")]
+position = Vector2(48, 48)
+sprite_texture = ExtResource("7_i5y0i")
 
 [connection signal="encounter_triggered" from="Player" to="." method="_on_player_encounter_triggered"]

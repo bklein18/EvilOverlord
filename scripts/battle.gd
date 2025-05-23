@@ -14,8 +14,6 @@ extends Node2D
 @onready var xp_bar = $BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer3/XPBar
 
 @onready var info_text_box = $BattleLayout/MarginContainer/InfoTextBox
-@onready var info_text = $BattleLayout/MarginContainer/InfoTextBox/MarginContainer/HBoxContainer/InfoText
-@onready var arrow_prompt = $BattleLayout/MarginContainer/InfoTextBox/MarginContainer/HBoxContainer/RichTextLabel
 
 @onready var control_panel = $BattleLayout/MarginContainer/VBoxContainer/ControlPanel
 @onready var command = $BattleLayout/MarginContainer/VBoxContainer/ControlPanel/MarginContainer/GridContainer/Command
@@ -106,7 +104,6 @@ var player_turn := false:
 		return player_turn
 
 signal battle_finished
-signal player_input
 
 const ANIMATION_SPEED = 0.4
 
@@ -117,8 +114,7 @@ func _ready():
 	current_enemy_minion = enemy_minions[0]
 	player_info.hide()
 	camera_2d.make_current()
-	info_text.text = ""
-	arrow_prompt.hide()
+	info_text_box.clear()
 	
 	for item in  player_inventory:
 		if item.CurrentQuantity > 0:
@@ -129,7 +125,7 @@ func _ready():
 
 func set_active_player_minion(to: Minions.Minion):
 	disable_buttons()
-	await show_text_and_wait_for_input("You sent out " + to.Name + "!")
+	await info_text_box.show_text_and_wait_for_input("You sent out " + to.Name + "!")
 	if not player_info.is_visible_in_tree():
 		player_info.show()
 	current_player_minion = to
@@ -143,19 +139,15 @@ func set_active_player_minion(to: Minions.Minion):
 
 func enemy_turn():
 	var selected_move = current_enemy_minion.Moves[(randi() % current_enemy_minion.Moves.size()) - 1]
-	await show_text_and_wait_for_input("Enemy " + current_enemy_minion.Name + " used " + selected_move.name + "!")
+	await info_text_box.show_text_and_wait_for_input("Enemy " + current_enemy_minion.Name + " used " + selected_move.name + "!")
 	await enemy_move_selected(selected_move)
 	player_turn = true
-
-func _input(event):
-	if event.is_action_pressed("accept") and not select_new_minion_box.is_visible_in_tree():
-		player_input.emit()
-
+	
 func set_wild_minion(minion: Minions.Minion):
 	is_wild_encounter = true
 	current_enemy_minion = minion
 	enemy_sprite.texture = load("res://assets/minions/" + current_enemy_minion.Name + ".png")
-	await show_text_and_wait_for_input("A wild " + minion.get_minion_name(minion.EnumVal) + " appeared!")
+	await info_text_box.show_text_and_wait_for_input("A wild " + minion.get_minion_name(minion.EnumVal) + " appeared!")
 	var alive_player_minions = player_minions.filter(func(m):
 		return m.Current_Health > 0
 	)
@@ -218,33 +210,15 @@ func _on_retreat_pressed():
 		var enemy_speed_roll = (randi() % 75) + current_enemy_minion.Speed
 		var player_speed_roll = (randi() % 100) + current_player_minion.Speed
 		if player_speed_roll > enemy_speed_roll:
-			await show_text_with_auto_timeout("Got away safely!")
+			await info_text_box.show_text_with_auto_timeout("Got away safely!")
 			battle_finished.emit()
 		else:
 			disable_buttons()
-			await show_text_with_auto_timeout("Couldn't get away!")
+			await info_text_box.show_text_with_auto_timeout("Couldn't get away!")
 			player_turn = false
 
 func wait(seconds: float):
 	await get_tree().create_timer(seconds).timeout
-
-func show_text_with_auto_timeout(text: String):
-	disable_buttons()
-	info_text_box.show()
-	info_text.text = text
-	await wait(2.5)
-	info_text_box.hide()
-	info_text.text = ""
-
-func show_text_and_wait_for_input(text: String):
-	disable_buttons()
-	info_text_box.show()
-	arrow_prompt.show()
-	info_text.text = text
-	await player_input
-	arrow_prompt.hide()
-	info_text_box.hide()
-	info_text.text = ""
 
 func disable_buttons():
 	command.disabled = true
@@ -264,9 +238,9 @@ func enable_buttons():
 
 func player_minion_changed(minion: Minions.Minion):
 	if current_player_minion == minion:
-		show_text_and_wait_for_input(minion.Name + " is already out!")
+		info_text_box.show_text_and_wait_for_input(minion.Name + " is already out!")
 	elif minion.Current_Health == 0:
-		show_text_and_wait_for_input(minion.Name + " is dead!")
+		info_text_box.show_text_and_wait_for_input(minion.Name + " is dead!")
 	else:
 		minion_panel.hide()
 		select_new_minion_box.hide()
@@ -278,7 +252,7 @@ func player_move_selected(move: Minions.Move):
 	control_panel.show()
 	disable_buttons()
 	var result = current_player_minion.perform(move)
-	await show_text_and_wait_for_input(current_player_minion.Name + " used " + move.name + "!")
+	await info_text_box.show_text_and_wait_for_input(current_player_minion.Name + " used " + move.name + "!")
 	match move.category:
 		Minions.Move.Category.Attack, Minions.Move.Category.Magic_Attack:
 			await damage_enemy(current_enemy_minion, result, move.category)
@@ -287,18 +261,18 @@ func player_move_selected(move: Minions.Move):
 			if result == 0:
 				var defense_boost_amt = "up" if move.base_val == 1 else "way up"
 				var defense_type = "defense" if move.catergory == Minions.Move.Category.Defense else "magic defense"
-				await show_text_and_wait_for_input(current_player_minion.Name + "'s " + defense_type + " went " + defense_boost_amt)
+				await info_text_box.show_text_and_wait_for_input(current_player_minion.Name + "'s " + defense_type + " went " + defense_boost_amt)
 			else:
 				var defense_type = "defense" if move.catergory == Minions.Move.Category.Defense else "magic defense"
-				await show_text_and_wait_for_input(current_player_minion.Name + "'s " + defense_type + " can't go any higher!")
+				await info_text_box.show_text_and_wait_for_input(current_player_minion.Name + "'s " + defense_type + " can't go any higher!")
 		Minions.Move.Category.Defense_Debuff, Minions.Move.Category.Magic_Defense_Debuff:
 			if result == 0:
 				var defense_boost_amt = "down" if move.base_val == 1 else "way down"
 				var defense_type = "defense" if move.catergory == Minions.Move.Category.Defense else "magic defense"
-				await show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " went " + defense_boost_amt)
+				await info_text_box.show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " went " + defense_boost_amt)
 			else:
 				var defense_type = "defense" if move.catergory == Minions.Move.Category.Defense else "magic defense"
-				await show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " can't go any lower!")
+				await info_text_box.show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " can't go any lower!")
 		_:
 			pass
 	player_turn = false
@@ -327,18 +301,18 @@ func enemy_move_selected(move: Minions.Move):
 			if result == 0:
 				var defense_boost_amt = "up" if move.base_val == 1 else "way up"
 				var defense_type = "defense" if move.catergory == Minions.Move.Category.Defense else "magic defense"
-				await show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " went " + defense_boost_amt)
+				await info_text_box.show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " went " + defense_boost_amt)
 			else:
 				var defense_type = "defense" if move.catergory == Minions.Move.Category.Defense else "magic defense"
-				await show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " can't go any higher!")
+				await info_text_box.show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " can't go any higher!")
 		Minions.Move.Category.Defense_Debuff, Minions.Move.Category.Magic_Defense_Debuff:
 			if result == 0:
 				var defense_boost_amt = "down" if move.base_val == 1 else "way down"
 				var defense_type = "defense" if move.catergory == Minions.Move.Category.Defense else "magic defense"
-				await show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " went " + defense_boost_amt)
+				await info_text_box.show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " went " + defense_boost_amt)
 			else:
 				var defense_type = "defense" if move.catergory == Minions.Move.Category.Defense else "magic defense"
-				await show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " can't go any lower!")
+				await info_text_box.show_text_and_wait_for_input(current_enemy_minion.Name + "'s " + defense_type + " can't go any lower!")
 		_:
 			pass
 
@@ -373,7 +347,7 @@ func player_item_selected(item: Items.Item):
 		item_container.remove_child(i)
 		item_previews.pop_at(index)
 		player_inventory.pop_at(index)
-	await show_text_and_wait_for_input("You used " + item.Name + "!")
+	await info_text_box.show_text_and_wait_for_input("You used " + item.Name + "!")
 	enable_buttons()
 	player_turn = false
 
@@ -383,17 +357,17 @@ func check_for_battle_win():
 		return minion.Current_Health > 0
 	)
 	if current_enemy_minion.Current_Health == 0:
-		await show_text_and_wait_for_input(current_enemy_minion.Name + " was killed!")
+		await info_text_box.show_text_and_wait_for_input(current_enemy_minion.Name + " was killed!")
 		if is_wild_encounter:
 			var xp_gain = current_enemy_minion.Base_XP_Yield * current_enemy_minion.Level
 			for minion in minions_and_xp_share.keys():
 				var actual_xp: int = xp_gain * minions_and_xp_share[minion]
-				await show_text_and_wait_for_input(minion.Name + " gained " + str(actual_xp) + " XP!")
+				await info_text_box.show_text_and_wait_for_input(minion.Name + " gained " + str(actual_xp) + " XP!")
 				var tween = create_tween()
 				tween.tween_property(xp_bar, "value", minion.XP + actual_xp, 0.5)
 				await tween.finished
 				await wait(1.0)
-				await show_text_with_auto_timeout("You won the fight!")
+				await info_text_box.show_text_with_auto_timeout("You won the fight!")
 				minion.XP += actual_xp
 		if current_player_minion.Current_Health == 0 and player_minion_hp_above_zero.size() > 0:
 			show_select_new_minion_box()
@@ -403,8 +377,8 @@ func check_for_battle_win():
 		show_select_new_minion_box()
 
 func show_select_new_minion_box():
-	await show_text_and_wait_for_input(current_player_minion.Name + " was killed!")
-	show_text_and_wait_for_input("Send next minion?")
+	await info_text_box.show_text_and_wait_for_input(current_player_minion.Name + " was killed!")
+	info_text_box.show_text_and_wait_for_input("Send next minion?")
 	select_new_minion_box.show()
 
 func _on_yes_pressed():
@@ -415,9 +389,9 @@ func _on_no_pressed():
 		var enemy_speed_roll = (randi() % 75) + current_enemy_minion.Speed
 		var player_speed_roll = (randi() % 100) + current_player_minion.Speed
 		if player_speed_roll > enemy_speed_roll:
-			await show_text_with_auto_timeout("Got away safely!")
+			await info_text_box.show_text_with_auto_timeout("Got away safely!")
 			battle_finished.emit()
 		else:
 			disable_buttons()
-			await show_text_with_auto_timeout("Couldn't get away!")
+			await info_text_box.show_text_with_auto_timeout("Couldn't get away!")
 			_on_minions_pressed()

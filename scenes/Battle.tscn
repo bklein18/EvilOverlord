@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://baah4keidadhd"]
+[gd_scene load_steps=10 format=3 uid="uid://baah4keidadhd"]
 
 [ext_resource type="Script" uid="uid://jk3p6c0shujj" path="res://scripts/battle.gd" id="1_0448q"]
 [ext_resource type="Theme" uid="uid://doim5rcwhni0d" path="res://assets/game_theme.tres" id="1_bdmed"]
 [ext_resource type="PackedScene" uid="uid://cb0gj2t6o8vxr" path="res://scenes/ui_elements/minion_preview.tscn" id="3_2rusm"]
+[ext_resource type="PackedScene" uid="uid://cgpn26oog76so" path="res://scenes/ui_elements/info_text_box.tscn" id="4_6grd4"]
 
 [sub_resource type="GDScript" id="GDScript_0448q"]
 script/source = "extends Control
@@ -424,34 +425,8 @@ scroll_vertical_custom_step = 2.0
 [node name="VBoxContainer" type="VBoxContainer" parent="BattleLayout/MarginContainer/ItemPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer"]
 layout_mode = 2
 
-[node name="InfoTextBox" type="PanelContainer" parent="BattleLayout/MarginContainer"]
-visible = false
-custom_minimum_size = Vector2(0, 36)
+[node name="InfoTextBox" parent="BattleLayout/MarginContainer" instance=ExtResource("4_6grd4")]
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 8
-
-[node name="MarginContainer" type="MarginContainer" parent="BattleLayout/MarginContainer/InfoTextBox"]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_right = 26
-
-[node name="HBoxContainer" type="HBoxContainer" parent="BattleLayout/MarginContainer/InfoTextBox/MarginContainer"]
-layout_mode = 2
-
-[node name="InfoText" type="Label" parent="BattleLayout/MarginContainer/InfoTextBox/MarginContainer/HBoxContainer"]
-layout_mode = 2
-text = "INFO TEXT"
-
-[node name="RichTextLabel" type="RichTextLabel" parent="BattleLayout/MarginContainer/InfoTextBox/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(20, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-bbcode_enabled = true
-text = "[center][color=white][pulse color=#ffffff40 frequency=1.0 ease=-2.0]→[/pulse][/color][/center]"
-fit_content = true
-scroll_active = false
 
 [node name="SelectNewMinionBox" type="PanelContainer" parent="BattleLayout/MarginContainer"]
 visible = false

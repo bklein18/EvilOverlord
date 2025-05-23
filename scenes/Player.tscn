@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://j0co65ryx40r"]
+[gd_scene load_steps=5 format=3 uid="uid://j0co65ryx40r"]
 
 [ext_resource type="Texture2D" uid="uid://gp0yvhk505ko" path="res://assets/Player.png" id="1_p0vlq"]
 [ext_resource type="Script" uid="uid://b3uy1elqmoeho" path="res://scripts/player.gd" id="1_v6fml"]
+[ext_resource type="PackedScene" uid="uid://cgpn26oog76so" path="res://scenes/ui_elements/info_text_box.tscn" id="3_3li8b"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v6fml"]
 size = Vector2(30, 32)
@@ -17,4 +18,30 @@ shape = SubResource("RectangleShape2D_v6fml")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
+[node name="Control" type="Control" parent="Camera2D"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -160.0
+offset_top = -90.0
+offset_right = 160.0
+offset_bottom = 90.0
+
+[node name="InfoTextBox" parent="Camera2D/Control" instance=ExtResource("3_3li8b")]
+visible = false
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -36.0
+offset_right = 146.0
+grow_vertical = 0
+
 [node name="RayCast2D" type="RayCast2D" parent="."]
+
+[node name="CooldownTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[connection signal="interaction_finished" from="." to="." method="_on_interaction_finished"]
+[connection signal="interaction_started" from="." to="." method="_on_interaction_started"]
+[connection signal="timeout" from="CooldownTimer" to="." method="_on_cooldown_timer_timeout"]
