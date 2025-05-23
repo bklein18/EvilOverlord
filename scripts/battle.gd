@@ -44,6 +44,10 @@ extends Node2D
 
 @onready var item_previews = []
 
+@onready var select_new_minion_box = $BattleLayout/MarginContainer/SelectNewMinionBox
+@onready var yes = $BattleLayout/MarginContainer/SelectNewMinionBox/MarginContainer/GridContainer/Yes
+@onready var no = $BattleLayout/MarginContainer/SelectNewMinionBox/MarginContainer/GridContainer/No
+
 @onready var camera_2d = $Camera2D
 @export var enemy_minions: Array = [Minions.Minion.new()]
 @export var player_minions: Array = SceneManager.party
@@ -57,7 +61,14 @@ var current_enemy_minion: Minions.Minion = Minions.Minion.new():
 		enemy_hp_bar.value = current_enemy_minion.Current_Health
 	get:
 		return current_enemy_minion
-var current_player_minion: Minions.Minion = player_minions[0]
+var current_player_minion: Minions.Minion:
+	set(new_minion):
+		current_player_minion = new_minion
+		player_name_label.text = new_minion.Name
+		player_level_label.text = "LV. " + str(new_minion.Level)
+		player_hp_bar.max_value = current_player_minion.Max_Health
+		player_hp_bar.value = current_player_minion.Current_Health
+		player_hp_label.text = str(current_player_minion.Current_Health) + "/" + str(current_player_minion.Max_Health)
 
 var is_in_submenu := false
 var wait_for_input := false
@@ -71,7 +82,7 @@ var player_hp_amount: int = player_minions[0].Current_Health:
 
 var player_turn := false:
 	set(new_value):
-		check_for_battle_win()
+		await check_for_battle_win()
 		if !new_value:
 			disable_buttons()
 			await enemy_turn()
@@ -126,7 +137,7 @@ func enemy_turn():
 	player_turn = true
 
 func _input(event):
-	if event.is_action_pressed("accept"):
+	if event.is_action_pressed("accept") and not select_new_minion_box.is_visible_in_tree():
 		player_input.emit()
 
 func set_wild_minion(minion: Minions.Minion):
@@ -134,7 +145,10 @@ func set_wild_minion(minion: Minions.Minion):
 	current_enemy_minion = minion
 	enemy_sprite.texture = load("res://assets/minions/" + current_enemy_minion.Name + ".png")
 	await show_text_and_wait_for_input("A wild " + minion.get_minion_name(minion.EnumVal) + " appeared!")
-	await set_active_player_minion(player_minions[0])
+	var alive_player_minions = player_minions.filter(func(m):
+		return m.Current_Health > 0
+	)
+	await set_active_player_minion(alive_player_minions[0])
 	var enemy_speed_roll = (randi() % 100) + current_enemy_minion.Speed
 	var player_speed_roll = (randi() % 100) + current_player_minion.Speed
 	player_turn = player_speed_roll > enemy_speed_roll
@@ -176,7 +190,9 @@ func _on_minions_pressed():
 			minion_previews[index].hide()
 
 func _on_minion_back_pressed():
-	minion_panel.hide()
+	if not current_player_minion.Current_Health == 0:
+		minion_panel.hide()
+		enable_buttons()
 
 func _on_item_pressed():
 	item_panel.show()
@@ -238,8 +254,11 @@ func enable_buttons():
 func player_minion_changed(minion: Minions.Minion):
 	if current_player_minion == minion:
 		show_text_and_wait_for_input(minion.Name + " is already out!")
+	elif minion.Current_Health == 0:
+		show_text_and_wait_for_input(minion.Name + " is dead!")
 	else:
 		minion_panel.hide()
+		select_new_minion_box.hide()
 		await set_active_player_minion(minion)
 		player_turn = false
 
@@ -355,10 +374,28 @@ func check_for_battle_win():
 	if current_enemy_minion.Current_Health == 0:
 		await show_text_and_wait_for_input(current_enemy_minion.Name + " was killed!")
 		if current_player_minion.Current_Health == 0 and player_minion_hp_above_zero.size() > 0:
-			await show_text_and_wait_for_input(current_player_minion.Name + " was killed!")
-			await show_text_and_wait_for_input("Send next minion?")
-		battle_finished.emit()
+			show_select_new_minion_box()
+		else:
+			battle_finished.emit()
 	if current_player_minion.Current_Health == 0 and player_minion_hp_above_zero.size() > 0:
-		await show_text_and_wait_for_input(current_player_minion.Name + " was killed!")
-		await show_text_and_wait_for_input("Send next minion?")
-		battle_finished.emit()
+		show_select_new_minion_box()
+
+func show_select_new_minion_box():
+	await show_text_and_wait_for_input(current_player_minion.Name + " was killed!")
+	show_text_and_wait_for_input("Send next minion?")
+	select_new_minion_box.show()
+
+func _on_yes_pressed():
+	_on_minions_pressed()
+
+func _on_no_pressed():
+	if is_wild_encounter:
+		var enemy_speed_roll = (randi() % 75) + current_enemy_minion.Speed
+		var player_speed_roll = (randi() % 100) + current_player_minion.Speed
+		if player_speed_roll > enemy_speed_roll:
+			await show_text_with_auto_timeout("Got away safely!")
+			battle_finished.emit()
+		else:
+			disable_buttons()
+			await show_text_with_auto_timeout("Couldn't get away!")
+			_on_minions_pressed()

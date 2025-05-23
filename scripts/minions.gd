@@ -6,16 +6,38 @@ static func wild_minion_from_enum(enum_val: Minion.Minions) -> Minion:
 	new.Type = new.get_minion_types(enum_val)
 	new.EnumVal = enum_val
 	var level_range = new.get_minion_level_range(enum_val)
+	new.Level = randi() % (level_range[-1] - level_range[0] + 1) + level_range[0]
+	var attack_range = new.get_minion_base_stat_range(Minions.Minion.Stats.Attack)
+	new.Attack = randi() % (attack_range[-1] - attack_range[0] + 1) + attack_range[0]
+	var defense_range = new.get_minion_base_stat_range(Minions.Minion.Stats.Defense)
+	new.Defense = randi() % (defense_range[-1] - defense_range[0] + 1) + defense_range[0]
+	var magic_attack_range = new.get_minion_base_stat_range(Minions.Minion.Stats.Magic_Attack)
+	new.Magic_Attack = randi() % (magic_attack_range[-1] - magic_attack_range[0] + 1) + magic_attack_range[0]
+	var magic_defense_range = new.get_minion_base_stat_range(Minions.Minion.Stats.Magic_Defense)
+	new.Magic_Defense = randi() % (magic_defense_range[-1] - magic_defense_range[0] + 1) + magic_defense_range[0]
+	var speed_range = new.get_minion_base_stat_range(Minions.Minion.Stats.Speed)
+	new.Speed = randi() % (speed_range[-1] - speed_range[0] + 1) + speed_range[0]
+	new.Luck = new.get_minion_base_stat_range(Minions.Minion.Stats.Luck)[0]
+	new.Attack_Growth_Rate = new.get_minion_base_stat_range(Minions.Minion.Stats.Attack_Growth_Rate)[0]
+	new.Defense_Growth_Rate = new.get_minion_base_stat_range(Minions.Minion.Stats.Defense_Growth_Rate)[0]
+	new.Magic_Attack_Growth_Rate = new.get_minion_base_stat_range(Minions.Minion.Stats.Magic_Attack_Growth_Rate)[0]
+	new.Magic_Defense_Growth_Rate = new.get_minion_base_stat_range(Minions.Minion.Stats.Magic_Defense_Growth_Rate)[0]
+	new.Speed_Growth_Rate = new.get_minion_base_stat_range(Minions.Minion.Stats.Speed_Growth_Rate)[0]
 	if level_range.size() > 0:
-		new.Level = randi() % (level_range[-1] - level_range[0] + 1) + level_range[0]
 		var moves = []
 		var learnset = Minion.get_learnset(enum_val)
 		for level in range(1, new.Level + 1):
+			new.Attack += ceil(new.Attack_Growth_Rate * new.Attack / 50)
+			new.Defense += ceil(new.Defense_Growth_Rate * new.Attack / 50)
+			new.Magic_Attack += ceil(new.Magic_Attack_Growth_Rate * new.Attack / 50)
+			new.Magic_Defense += ceil(new.Magic_Defense_Growth_Rate * new.Attack / 50)
+			new.Speed += ceil(new.Speed_Growth_Rate * new.Attack / 50)
 			if level in learnset.keys():
 				moves.append(learnset[level])
 				if moves.size() > 4:
 					moves.pop_front()
 		new.Moves = moves
+	
 	return new
 
 class Minion:
@@ -24,15 +46,36 @@ class Minion:
 	var Type: Array = []
 	var Moves: Array = []
 	var Level: int = 0
-	var Current_Health: int = 10
+	var Current_Health: int = 10:
+		set(new_value):
+			Current_Health = clampi(new_value, 0, Max_Health)
 	var Max_Health: int = 10
 	var Attack: int = 10
+	var Attack_Growth_Rate: float = 1.0:
+		set(new_value):
+			Attack_Growth_Rate = clampf(new_value, 0.5, 1.5)
 	var Defense: int = 10
+	var Defense_Growth_Rate: float = 1.0:
+		set(new_value):
+			Defense_Growth_Rate = clampf(new_value, 0.5, 1.5)
 	var Magic_Attack: int = 10
+	var Magic_Attack_Growth_Rate: float = 1.0:
+		set(new_value):
+			Magic_Attack_Growth_Rate = clampf(new_value, 0.5, 1.5)
 	var Magic_Defense: int = 10
+	var Magic_Defense_Growth_Rate: float = 1.0:
+		set(new_value):
+			Magic_Defense_Growth_Rate = clampf(new_value, 0.5, 1.5)
 	var Speed: int = 10
+	var Speed_Growth_Rate: float = 1.0:
+		set(new_value):
+			Speed_Growth_Rate = clampf(new_value, 0.5, 1.5)
 	var Luck: float = 0.1
 	var Number: int = 0
+	var Base_XP_Yield: int = 10
+	var Growth_Rate: float:
+		set(new_value):
+			Growth_Rate = clampf(new_value, 0.5, 1.5)
 	
 	# max boost increase is 40% above base stats (stored in -4 to 4 range)
 	# if boosts are increased when at the cap, increase duration by 2 turns
@@ -239,11 +282,295 @@ class Minion:
 			_:
 				return [5]
 	
+	enum Stats {
+		Attack,
+		Attack_Growth_Rate,
+		Defense,
+		Defense_Growth_Rate,
+		Magic_Attack,
+		Magic_Attack_Growth_Rate,
+		Magic_Defense,
+		Magic_Defense_Growth_Rate,
+		Speed,
+		Speed_Growth_Rate,
+		Luck
+	}
+	
+	func get_minion_base_stat_range(stat: Stats) -> Array:
+		match stat:
+			Stats.Attack:
+				match self.EnumVal:
+					Minions.Dave:
+						return range(6, 11)
+					Minions.Zulio:
+						return range(7, 12)
+					Minions.Skelly:
+						return range(5, 10)
+					Minions.Gelly:
+						return range(3, 6)
+					Minions.Phyll:
+						return range(4, 7)
+					Minions.Yyxyll:
+						return range(7, 10)
+					Minions.The_One_Who_Waits:
+						return range(5, 8)
+					Minions.Dhal:
+						return range(9, 11)
+					Minions.Eemini:
+						return range(4, 8)
+					Minions.Bear:
+						return range(7, 9)
+					_:
+						return []
+			Stats.Attack_Growth_Rate:
+				match self.EnumVal:
+					Minions.Dave:
+						return [1.2]
+					Minions.Zulio:
+						return [1.3]
+					Minions.Skelly:
+						return [0.9]
+					Minions.Gelly:
+						return [0.5]
+					Minions.Phyll:
+						return [0.7]
+					Minions.Yyxyll:
+						return [1.1]
+					Minions.The_One_Who_Waits:
+						return [1.0]
+					Minions.Dhal:
+						return [1.3]
+					Minions.Eemini:
+						return [0.8]
+					Minions.Bear:
+						return [1.2]
+					_:
+						return []	
+			Stats.Defense:
+				match self.EnumVal:
+					Minions.Dave:
+						return range(7,12)
+					Minions.Zulio:
+						return range(5, 10)
+					Minions.Skelly:
+						return range(6, 11)
+					Minions.Gelly:
+						return range(7, 10)
+					Minions.Phyll:
+						return range(6, 9)
+					Minions.Yyxyll:
+						return range(5, 7)
+					Minions.The_One_Who_Waits:
+						return range(6, 9)
+					Minions.Dhal:
+						return range(8, 10)
+					Minions.Eemini:
+						return range(3, 6)
+					Minions.Bear:
+						return range(8, 11)
+					_:
+						return []
+			Stats.Defense_Growth_Rate:
+				match self.EnumVal:
+					Minions.Dave:
+						return [13]
+					Minions.Zulio:
+						return [0.9]
+					Minions.Skelly:
+						return [11]
+					Minions.Gelly:
+						return [1.4]
+					Minions.Phyll:
+						return [0.9]
+					Minions.Yyxyll:
+						return [0.9]
+					Minions.The_One_Who_Waits:
+						return [0.7]
+					Minions.Dhal:
+						return [1.1]
+					Minions.Eemini:
+						return [0.6]
+					Minions.Bear:
+						return [1.3]
+					_:
+						return []
+			Stats.Magic_Attack:
+				match self.EnumVal:
+					Minions.Dave:
+						return range(5, 10)
+					Minions.Zulio:
+						return range(7, 12)
+					Minions.Skelly:
+						return range(6, 11)
+					Minions.Gelly:
+						return range(5, 7)
+					Minions.Phyll:
+						return range(7, 10)
+					Minions.Yyxyll:
+						return range(6, 9)
+					Minions.The_One_Who_Waits:
+						return range(8, 12)
+					Minions.Dhal:
+						return range(4, 6)
+					Minions.Eemini:
+						return range(7, 10)
+					Minions.Bear:
+						return range(4, 6)
+					_:
+						return []
+			Stats.Magic_Attack_Growth_Rate:
+				match self.EnumVal:
+					Minions.Dave:
+						return [0.9]
+					Minions.Zulio:
+						return [1.3]
+					Minions.Skelly:
+						return [1.1]
+					Minions.Gelly:
+						return [1.0]
+					Minions.Phyll:
+						return [1.0]
+					Minions.Yyxyll:
+						return [0.9]
+					Minions.The_One_Who_Waits:
+						return [1.3]
+					Minions.Dhal:
+						return [0.6]
+					Minions.Eemini:
+						return [1.1]
+					Minions.Bear:
+						return [0.8]
+					_:
+						return []
+			Stats.Magic_Defense:
+				match self.EnumVal:
+					Minions.Dave:
+						return range(6, 11)
+					Minions.Zulio:
+						return range(7, 12)
+					Minions.Skelly:
+						return range(5, 10)
+					Minions.Gelly:
+						return range(3, 6)
+					Minions.Phyll:
+						return range(4, 7)
+					Minions.Yyxyll:
+						return range(7, 10)
+					Minions.The_One_Who_Waits:
+						return range(5, 8)
+					Minions.Dhal:
+						return range(9, 11)
+					Minions.Eemini:
+						return range(4, 8)
+					Minions.Bear:
+						return range(7, 9)
+					_:
+						return []
+			Stats.Magic_Defense_Growth_Rate:
+				match self.EnumVal:
+					Minions.Dave:
+						return [1.2]
+					Minions.Zulio:
+						return [1.3]
+					Minions.Skelly:
+						return [0.9]
+					Minions.Gelly:
+						return [0.5]
+					Minions.Phyll:
+						return [0.7]
+					Minions.Yyxyll:
+						return [1.1]
+					Minions.The_One_Who_Waits:
+						return [1.0]
+					Minions.Dhal:
+						return [1.3]
+					Minions.Eemini:
+						return [0.8]
+					Minions.Bear:
+						return [1.2]
+					_:
+						return []
+			Stats.Speed:
+				match self.EnumVal:
+					Minions.Dave:
+						return range(6, 11)
+					Minions.Zulio:
+						return range(7, 12)
+					Minions.Skelly:
+						return range(5, 10)
+					Minions.Gelly:
+						return range(3, 6)
+					Minions.Phyll:
+						return range(4, 7)
+					Minions.Yyxyll:
+						return range(7, 10)
+					Minions.The_One_Who_Waits:
+						return range(5, 8)
+					Minions.Dhal:
+						return range(9, 11)
+					Minions.Eemini:
+						return range(4, 8)
+					Minions.Bear:
+						return range(7, 9)
+					_:
+						return []
+			Stats.Speed_Growth_Rate:
+				match self.EnumVal:
+					Minions.Dave:
+						return [1.2]
+					Minions.Zulio:
+						return [1.3]
+					Minions.Skelly:
+						return [0.9]
+					Minions.Gelly:
+						return [0.5]
+					Minions.Phyll:
+						return [0.7]
+					Minions.Yyxyll:
+						return [1.1]
+					Minions.The_One_Who_Waits:
+						return [1.0]
+					Minions.Dhal:
+						return [1.3]
+					Minions.Eemini:
+						return [0.8]
+					Minions.Bear:
+						return [1.2]
+					_:
+						return []
+			Stats.Luck:
+				match self.EnumVal:
+					Minions.Dave:
+						return [1.2]
+					Minions.Zulio:
+						return [1.3]
+					Minions.Skelly:
+						return [0.9]
+					Minions.Gelly:
+						return [0.5]
+					Minions.Phyll:
+						return [0.7]
+					Minions.Yyxyll:
+						return [1.1]
+					Minions.The_One_Who_Waits:
+						return [1.0]
+					Minions.Dhal:
+						return [1.3]
+					Minions.Eemini:
+						return [0.8]
+					Minions.Bear:
+						return [1.2]
+					_:
+						return []
+			_:
+				return []
+	
 	static func get_learnset(minion: Minions.Minion.Minions) -> Dictionary:
 		match minion:
 			Minions.Dave:
 				return {
-					1: Move.move_object_from_enum(Move.Moves.Charge)
+					1: Move.move_object_from_enum(Move.Moves.Charge),
+					3: Move.move_object_from_enum(Move.Moves.Fireball)
 				}
 			Minions.Skelly:
 				return {

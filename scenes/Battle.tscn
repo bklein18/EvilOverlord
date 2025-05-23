@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://baah4keidadhd"]
+[gd_scene load_steps=9 format=3 uid="uid://baah4keidadhd"]
 
 [ext_resource type="Script" uid="uid://jk3p6c0shujj" path="res://scripts/battle.gd" id="1_0448q"]
 [ext_resource type="Theme" uid="uid://doim5rcwhni0d" path="res://assets/game_theme.tres" id="1_bdmed"]
@@ -33,6 +33,18 @@ border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0y4rl"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.647059, 0.647059, 0.647059, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -421,6 +433,27 @@ text = "[center][color=white][pulse color=#ffffff40 frequency=1.0 ease=-2.0]→[
 fit_content = true
 scroll_active = false
 
+[node name="SelectNewMinionBox" type="PanelContainer" parent="BattleLayout/MarginContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_0y4rl")
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleLayout/MarginContainer/SelectNewMinionBox"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="BattleLayout/MarginContainer/SelectNewMinionBox/MarginContainer"]
+layout_mode = 2
+
+[node name="Yes" type="Button" parent="BattleLayout/MarginContainer/SelectNewMinionBox/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "YES"
+
+[node name="No" type="Button" parent="BattleLayout/MarginContainer/SelectNewMinionBox/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "NO"
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(160, 90)
 
@@ -438,3 +471,5 @@ position = Vector2(160, 90)
 [connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview5" to="." method="_on_minion_preview_5_minion_clicked"]
 [connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview6" to="." method="_on_minion_preview_6_minion_clicked"]
 [connection signal="pressed" from="BattleLayout/MarginContainer/ItemPanel/Panel/MarginContainer/HBoxContainer/ItemBack" to="." method="_on_item_back_pressed"]
+[connection signal="pressed" from="BattleLayout/MarginContainer/SelectNewMinionBox/MarginContainer/GridContainer/Yes" to="." method="_on_yes_pressed"]
+[connection signal="pressed" from="BattleLayout/MarginContainer/SelectNewMinionBox/MarginContainer/GridContainer/No" to="." method="_on_no_pressed"]
