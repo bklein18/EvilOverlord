@@ -37,10 +37,12 @@ static func wild_minion_from_enum(enum_val: Minion.Minions) -> Minion:
 				if moves.size() > 4:
 					moves.pop_front()
 		new.Moves = moves
-	
+	new.Growth_Rate = new.get_growth_rate()
+	new.XP = new.get_xp_for_level(new.Level)
 	return new
 
 class Minion:
+	var _ID: int = ResourceUID.create_id()
 	var Name: String = "Name"
 	var EnumVal := Minions.None
 	var Type: Array = []
@@ -76,6 +78,7 @@ class Minion:
 	var Growth_Rate: float:
 		set(new_value):
 			Growth_Rate = clampf(new_value, 0.5, 1.5)
+	var XP: int
 	
 	# max boost increase is 40% above base stats (stored in -4 to 4 range)
 	# if boosts are increased when at the cap, increase duration by 2 turns
@@ -576,6 +579,10 @@ class Minion:
 				return {
 					1: Move.move_object_from_enum(Move.Moves.Charge)
 				}
+			Minions.Zulio:
+				return {
+					1: Move.move_object_from_enum(Move.Moves.Charge)
+				}
 			Minions.Gelly:
 				return {
 					1: Move.move_object_from_enum(Move.Moves.Charge)
@@ -606,6 +613,50 @@ class Minion:
 				}
 			_:
 				return {}
+	
+	enum Growth_Rates {
+		Slow,
+		Medium_Slow,
+		Medium_Fast,
+		Fast
+	}
+	
+	func get_growth_rate() -> Growth_Rates:
+		match self.EnumVal:
+			Minions.Dave:
+				return Growth_Rates.Medium_Slow
+			Minions.Skelly:
+				return Growth_Rates.Fast
+			Minions.Zulio:
+				return Growth_Rates.Medium_Fast
+			Minions.Gelly:
+				return Growth_Rates.Medium_Fast
+			Minions.Phyll:
+				return Growth_Rates.Medium_Slow
+			Minions.Yyxyll:
+				return Growth_Rates.Medium_Slow
+			Minions.The_One_Who_Waits:
+				return Growth_Rates.Slow
+			Minions.Dhal:
+				return Growth_Rates.Slow
+			Minions.Eemini:
+				return Growth_Rates.Fast
+			Minions.Bear:
+				return Growth_Rates.Medium_Slow
+			_:
+				return Growth_Rates.Slow
+	
+	func get_xp_for_level(level: int) -> int:
+		match self.Growth_Rate:
+			Growth_Rates.Slow:
+				return (1.5 * pow(level, 3.0)) + (pow(level, 2.0))
+			Growth_Rates.Medium_Slow:
+				return (1.5 * pow(level, 3.0))
+			Growth_Rates.Fast:
+				return 0.8 * pow(level, 3.0)
+			_:
+				return pow(level, 3.0)
+
 
 class Move:
 	var name: String

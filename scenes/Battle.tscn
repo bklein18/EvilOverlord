@@ -98,9 +98,11 @@ size_flags_vertical = 8
 layout_mode = 2
 theme = ExtResource("1_bdmed")
 theme_override_constants/margin_top = 2
+theme_override_constants/margin_bottom = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 0
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -148,6 +150,24 @@ size_flags_horizontal = 0
 size_flags_vertical = 4
 theme = ExtResource("1_bdmed")
 value = 100.0
+show_percentage = false
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_constants/margin_top = 0
+
+[node name="Label" type="Label" parent="BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer3/MarginContainer"]
+layout_mode = 2
+text = "XP"
+
+[node name="XPBar" type="ProgressBar" parent="BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
 show_percentage = false
 
 [node name="ControlPanel" type="PanelContainer" parent="BattleLayout/MarginContainer/VBoxContainer"]
@@ -463,13 +483,7 @@ position = Vector2(160, 90)
 [connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/ControlPanel/MarginContainer/GridContainer/Retreat" to="." method="_on_retreat_pressed"]
 [connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/MovePanel/MarginContainer/HBoxContainer/MoveBack" to="." method="_on_move_back_pressed"]
 [connection signal="pressed" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/MinionBack" to="." method="_on_minion_back_pressed"]
-[connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview" to="." method="_on_minion_preview_minion_clicked"]
 [connection signal="mouse_entered" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview" to="." method="_on_minion_preview_mouse_entered"]
-[connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview2" to="." method="_on_minion_preview_2_minion_clicked"]
-[connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview3" to="." method="_on_minion_preview_3_minion_clicked"]
-[connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview4" to="." method="_on_minion_preview_4_minion_clicked"]
-[connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview5" to="." method="_on_minion_preview_5_minion_clicked"]
-[connection signal="minion_clicked" from="BattleLayout/MarginContainer/MinionPanel/Panel/MarginContainer/HBoxContainer/ScrollContainer/VBoxContainer/MinionPreview6" to="." method="_on_minion_preview_6_minion_clicked"]
 [connection signal="pressed" from="BattleLayout/MarginContainer/ItemPanel/Panel/MarginContainer/HBoxContainer/ItemBack" to="." method="_on_item_back_pressed"]
 [connection signal="pressed" from="BattleLayout/MarginContainer/SelectNewMinionBox/MarginContainer/GridContainer/Yes" to="." method="_on_yes_pressed"]
 [connection signal="pressed" from="BattleLayout/MarginContainer/SelectNewMinionBox/MarginContainer/GridContainer/No" to="." method="_on_no_pressed"]

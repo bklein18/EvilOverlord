@@ -11,6 +11,7 @@ extends Node2D
 @onready var player_sprite = $BattleLayout/MarginContainer/Container/PlayerSprite
 @onready var player_hp_label = $BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer2/PlayerHPLabel
 @onready var player_hp_bar = $BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer/PlayerHPBar
+@onready var xp_bar = $BattleLayout/MarginContainer/VBoxContainer/PlayerInfo/MarginContainer/VBoxContainer/HBoxContainer3/XPBar
 
 @onready var info_text_box = $BattleLayout/MarginContainer/InfoTextBox
 @onready var info_text = $BattleLayout/MarginContainer/InfoTextBox/MarginContainer/HBoxContainer/InfoText
@@ -69,11 +70,21 @@ var current_player_minion: Minions.Minion:
 		player_hp_bar.max_value = current_player_minion.Max_Health
 		player_hp_bar.value = current_player_minion.Current_Health
 		player_hp_label.text = str(current_player_minion.Current_Health) + "/" + str(current_player_minion.Max_Health)
+		xp_bar.min_value = current_player_minion.get_xp_for_level(current_player_minion.Level)
+		xp_bar.max_value = current_player_minion.get_xp_for_level(current_player_minion.Level + 1)
+		xp_bar.value = current_player_minion.XP
+		var other_minions_in_battle = minions_and_xp_share.keys()
+		var xp_share: float = 1.0 / (1.0 + float(other_minions_in_battle.size()))
+		for minion in other_minions_in_battle:
+			minions_and_xp_share[minion] = xp_share
+		minions_and_xp_share[current_player_minion] = xp_share
 
 var is_in_submenu := false
 var wait_for_input := false
 
 var is_wild_encounter := false
+
+var minions_and_xp_share: Dictionary = {}
 
 var player_hp_amount: int = player_minions[0].Current_Health:
 	set(new_value):
@@ -373,6 +384,17 @@ func check_for_battle_win():
 	)
 	if current_enemy_minion.Current_Health == 0:
 		await show_text_and_wait_for_input(current_enemy_minion.Name + " was killed!")
+		if is_wild_encounter:
+			var xp_gain = current_enemy_minion.Base_XP_Yield * current_enemy_minion.Level
+			for minion in minions_and_xp_share.keys():
+				var actual_xp: int = xp_gain * minions_and_xp_share[minion]
+				await show_text_and_wait_for_input(minion.Name + " gained " + str(actual_xp) + " XP!")
+				var tween = create_tween()
+				tween.tween_property(xp_bar, "value", minion.XP + actual_xp, 0.5)
+				await tween.finished
+				await wait(1.0)
+				await show_text_with_auto_timeout("You won the fight!")
+				minion.XP += actual_xp
 		if current_player_minion.Current_Health == 0 and player_minion_hp_above_zero.size() > 0:
 			show_select_new_minion_box()
 		else:
