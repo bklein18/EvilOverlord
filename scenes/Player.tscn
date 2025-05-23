@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://j0co65ryx40r"]
+[gd_scene load_steps=6 format=3 uid="uid://j0co65ryx40r"]
 
 [ext_resource type="Texture2D" uid="uid://gp0yvhk505ko" path="res://assets/Player.png" id="1_p0vlq"]
 [ext_resource type="Script" uid="uid://b3uy1elqmoeho" path="res://scripts/player.gd" id="1_v6fml"]
 [ext_resource type="PackedScene" uid="uid://cgpn26oog76so" path="res://scenes/ui_elements/info_text_box.tscn" id="3_3li8b"]
+[ext_resource type="PackedScene" uid="uid://1uvyq5x8mqw0" path="res://scenes/ui_elements/pause_menu.tscn" id="4_mdl7e"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v6fml"]
 size = Vector2(30, 32)
@@ -36,6 +37,10 @@ offset_top = -36.0
 offset_right = 146.0
 grow_vertical = 0
 
+[node name="PauseMenu" parent="Camera2D/Control" instance=ExtResource("4_mdl7e")]
+visible = false
+layout_mode = 1
+
 [node name="RayCast2D" type="RayCast2D" parent="."]
 
 [node name="CooldownTimer" type="Timer" parent="."]
@@ -44,4 +49,10 @@ one_shot = true
 
 [connection signal="interaction_finished" from="." to="." method="_on_interaction_finished"]
 [connection signal="interaction_started" from="." to="." method="_on_interaction_started"]
+[connection signal="pressed" from="Camera2D/Control/PauseMenu/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Party" to="." method="_on_party_pressed"]
+[connection signal="pressed" from="Camera2D/Control/PauseMenu/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Items" to="." method="_on_items_pressed"]
+[connection signal="pressed" from="Camera2D/Control/PauseMenu/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Save" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="Camera2D/Control/PauseMenu/MarginContainer/PanelContainer/MarginContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
 [connection signal="timeout" from="CooldownTimer" to="." method="_on_cooldown_timer_timeout"]
+
+[editable path="Camera2D/Control/PauseMenu"]

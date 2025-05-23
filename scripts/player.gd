@@ -24,9 +24,12 @@ var is_interaction_occurring = false
 @onready var ray: RayCast2D = $RayCast2D
 @onready var camera = $Camera2D
 @onready var info_text_box = $Camera2D/Control/InfoTextBox
+@onready var pause_menu = $Camera2D/Control/PauseMenu
 
 var interaction_cooldown = false
 @onready var cooldown_timer = $CooldownTimer
+
+var paused = false
 
 func _ready():
 	position = position.snapped(Vector2.ONE * TILE_SIZE)
@@ -34,6 +37,18 @@ func _ready():
 
 func _physics_process(_delta):
 	if moving or is_interaction_occurring:
+		return
+	
+	if Input.is_action_just_pressed("menu_back"):
+		if paused:
+			paused = false
+			pause_menu.hide()
+			cooldown_timer.start()
+		else:
+			paused = true
+			pause_menu.show()
+	
+	if paused:
 		return
 	if Input.is_action_pressed("move_down"):
 		move("move_down")
@@ -89,3 +104,15 @@ func _on_interaction_finished():
 
 func _on_cooldown_timer_timeout():
 	interaction_cooldown = false
+
+func _on_party_pressed():
+	print("party")
+
+func _on_items_pressed():
+	print("items")
+
+func _on_save_pressed():
+	print("save")
+
+func _on_quit_pressed():
+	get_tree().quit()
