@@ -1,0 +1,57 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4trbbkcw8mim"]
+
+[sub_resource type="GDScript" id="GDScript_er0fo"]
+script/source = "extends Control
+
+var minion_to_switch: Minions.Minion
+var party = SceneManager.party
+
+@onready var scroll_container = $ScrollContainer
+@onready var v_box_container = $ScrollContainer/MinionSwitchContainer
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	var party_less_swapped = party.filter(func(minion):
+		return not minion == minion_to_switch
+	)
+	for minion in party_less_swapped:
+		var new_preview = load(\"res://scenes/ui_elements/minion_preview.tscn\").instantiate()
+		new_preview.minion = minion
+		new_preview.alt_on_button = func():
+			swap_minions(minion_to_switch, minion)
+		v_box_container.add_child(new_preview)
+	v_box_container.reset_size()
+	scroll_container.reset_size()
+
+func swap_minions(minion_1, minion_2):
+	var index_1 = party.find(minion_1)
+	var index_2 = party.find(minion_2)
+	var tmp = minion_1
+	party[index_1] = minion_2
+	party[index_2] = minion_1
+"
+
+[node name="MinionSwitchMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = SubResource("GDScript_er0fo")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MinionSwitchContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1

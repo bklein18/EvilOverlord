@@ -184,8 +184,10 @@ func _on_minions_pressed():
 	minion_panel.show()
 	for index in range(player_minions.size()):
 		minion_previews[index].minion = player_minions[index]
+		minion_previews[index].options = {
+			"SWAP": player_minion_changed
+		}
 		minion_previews[index].show()
-		minion_previews[index].minion_clicked.connect(player_minion_changed)
 	
 	if player_minions.size() < 6:
 		for index in range(player_minions.size(), 6):
