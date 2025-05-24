@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://baah4keidadhd"]
+[gd_scene load_steps=11 format=3 uid="uid://baah4keidadhd"]
 
 [ext_resource type="Script" uid="uid://jk3p6c0shujj" path="res://scripts/battle.gd" id="1_0448q"]
 [ext_resource type="Theme" uid="uid://doim5rcwhni0d" path="res://assets/game_theme.tres" id="1_bdmed"]
 [ext_resource type="PackedScene" uid="uid://cb0gj2t6o8vxr" path="res://scenes/ui_elements/minion_preview.tscn" id="3_2rusm"]
 [ext_resource type="PackedScene" uid="uid://cgpn26oog76so" path="res://scenes/ui_elements/info_text_box.tscn" id="4_6grd4"]
+[ext_resource type="AudioStream" uid="uid://b2ovl2gpwlkk5" path="res://assets/music/Battle.wav" id="5_0y4rl"]
 
 [sub_resource type="GDScript" id="GDScript_0448q"]
 script/source = "extends Control
@@ -451,6 +452,10 @@ text = "NO"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(160, 90)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_0y4rl")
+autoplay = true
 
 [connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/ControlPanel/MarginContainer/GridContainer/Command" to="." method="_on_command_pressed"]
 [connection signal="pressed" from="BattleLayout/MarginContainer/VBoxContainer/ControlPanel/MarginContainer/GridContainer/Minions" to="." method="_on_minions_pressed"]
