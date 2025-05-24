@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bukshyfqdh6yd"]
+[gd_scene load_steps=11 format=3 uid="uid://bukshyfqdh6yd"]
 
 [ext_resource type="Script" uid="uid://dungv8oic4sdp" path="res://scripts/intro_scene.gd" id="1_6tor5"]
 [ext_resource type="Texture2D" uid="uid://c1ijvu7gfwmvu" path="res://assets/castle_background.png" id="1_g6t57"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cgpn26oog76so" path="res://scenes/ui_elements/info_text_box.tscn" id="3_3uwhn"]
 [ext_resource type="PackedScene" uid="uid://csj5odjov11m2" path="res://scenes/FirstMinionChoice.tscn" id="5_nx802"]
 [ext_resource type="AudioStream" uid="uid://bkvl76n4rwov7" path="res://assets/music/EvilCastle.wav" id="6_k6el7"]
+[ext_resource type="Texture2D" uid="uid://dpse8lea72d83" path="res://assets/npcs/Grandpa.png" id="7_yr2gr"]
 
 [sub_resource type="Animation" id="Animation_6tor5"]
 resource_name = "IntroCutscene"
@@ -111,3 +112,7 @@ layout_mode = 1
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("6_k6el7")
 autoplay = true
+
+[node name="Grandpa" type="Sprite2D" parent="."]
+position = Vector2(72, 102)
+texture = ExtResource("7_yr2gr")
