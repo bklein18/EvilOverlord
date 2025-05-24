@@ -1,0 +1,113 @@
+[gd_scene load_steps=10 format=3 uid="uid://bukshyfqdh6yd"]
+
+[ext_resource type="Script" uid="uid://dungv8oic4sdp" path="res://scripts/intro_scene.gd" id="1_6tor5"]
+[ext_resource type="Texture2D" uid="uid://c1ijvu7gfwmvu" path="res://assets/castle_background.png" id="1_g6t57"]
+[ext_resource type="Texture2D" uid="uid://gp0yvhk505ko" path="res://assets/Player.png" id="2_ngq6t"]
+[ext_resource type="PackedScene" uid="uid://cgpn26oog76so" path="res://scenes/ui_elements/info_text_box.tscn" id="3_3uwhn"]
+[ext_resource type="PackedScene" uid="uid://csj5odjov11m2" path="res://scenes/FirstMinionChoice.tscn" id="5_nx802"]
+[ext_resource type="AudioStream" uid="uid://bkvl76n4rwov7" path="res://assets/music/EvilCastle.wav" id="6_k6el7"]
+
+[sub_resource type="Animation" id="Animation_6tor5"]
+resource_name = "IntroCutscene"
+length = 2.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Player:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(135, 102), Vector2(250, 102)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Player:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_ngq6t"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Player:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(135, 102)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Player:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nx802"]
+_data = {
+&"IntroCutscene": SubResource("Animation_6tor5"),
+&"RESET": SubResource("Animation_ngq6t")
+}
+
+[node name="IntroScene" type="Node2D"]
+script = ExtResource("1_6tor5")
+
+[node name="CastleBackground" type="Sprite2D" parent="."]
+position = Vector2(160, 90)
+texture = ExtResource("1_g6t57")
+
+[node name="Player" type="Sprite2D" parent="."]
+position = Vector2(135, 102)
+texture = ExtResource("2_ngq6t")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_nx802")
+}
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 320.0
+offset_bottom = 180.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_bottom = 16
+
+[node name="InfoTextBox" parent="Control/MarginContainer" instance=ExtResource("3_3uwhn")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="FirstMinionChoice" parent="Control" instance=ExtResource("5_nx802")]
+visible = false
+layout_mode = 1
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_k6el7")
+autoplay = true

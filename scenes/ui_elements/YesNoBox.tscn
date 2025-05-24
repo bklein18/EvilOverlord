@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6lgoi07tqqxk"]
+
+[ext_resource type="Theme" uid="uid://doim5rcwhni0d" path="res://assets/game_theme.tres" id="1_51uf3"]
+[ext_resource type="Script" uid="uid://fno3w0jxd60g" path="res://scripts/ui_elements/yes_no_box.gd" id="2_0ahwe"]
+
+[node name="YesNoBox" type="PanelContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_51uf3")
+script = ExtResource("2_0ahwe")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Yes" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "YES"
+
+[node name="No" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "NO"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Yes" to="." method="_on_yes_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/No" to="." method="_on_no_pressed"]

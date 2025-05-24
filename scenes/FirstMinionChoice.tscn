@@ -1,0 +1,72 @@
+[gd_scene load_steps=8 format=3 uid="uid://csj5odjov11m2"]
+
+[ext_resource type="Texture2D" uid="uid://v7eh2ushphow" path="res://assets/minions/Dave.png" id="1_34s83"]
+[ext_resource type="Script" uid="uid://c0g23dgyvs6aq" path="res://scripts/first_minion_choice.gd" id="1_mkk6m"]
+[ext_resource type="Theme" uid="uid://doim5rcwhni0d" path="res://assets/game_theme.tres" id="1_nq23a"]
+[ext_resource type="Texture2D" uid="uid://b2mj1f60lf05c" path="res://assets/minions/Zulio.png" id="2_p2h32"]
+[ext_resource type="Texture2D" uid="uid://cmdubb4ba0mni" path="res://assets/minions/Skelly.png" id="3_p2h32"]
+[ext_resource type="PackedScene" uid="uid://cgpn26oog76so" path="res://scenes/ui_elements/info_text_box.tscn" id="6_guvht"]
+[ext_resource type="PackedScene" uid="uid://b6lgoi07tqqxk" path="res://scenes/ui_elements/YesNoBox.tscn" id="7_guvht"]
+
+[node name="FirstMinionChoice" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mkk6m")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_nq23a")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Dave" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_nq23a")
+icon = ExtResource("1_34s83")
+
+[node name="Zulio" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_nq23a")
+icon = ExtResource("2_p2h32")
+
+[node name="Skelly" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_nq23a")
+icon = ExtResource("3_p2h32")
+
+[node name="InfoTextBox" parent="MarginContainer" instance=ExtResource("6_guvht")]
+visible = false
+layout_mode = 2
+
+[node name="YesNoBox" parent="MarginContainer" instance=ExtResource("7_guvht")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[connection signal="pressed" from="MarginContainer/PanelContainer/MarginContainer/HBoxContainer/Dave" to="." method="_on_dave_pressed"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/MarginContainer/HBoxContainer/Zulio" to="." method="_on_zulio_pressed"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/MarginContainer/HBoxContainer/Skelly" to="." method="_on_skelly_pressed"]
+[connection signal="choice" from="MarginContainer/YesNoBox" to="." method="_on_yes_no_box_choice"]

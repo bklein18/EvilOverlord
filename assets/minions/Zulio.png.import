@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b2mj1f60lf05c"
-path="res://.godot/imported/Zulie.png-6a42856bf847110b4b4e4c7f258cb4d6.ctex"
+path="res://.godot/imported/Zulio.png-4af6be08ad9290528b5b6738a8be7c31.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/minions/Zulie.png"
-dest_files=["res://.godot/imported/Zulie.png-6a42856bf847110b4b4e4c7f258cb4d6.ctex"]
+source_file="res://assets/minions/Zulio.png"
+dest_files=["res://.godot/imported/Zulio.png-4af6be08ad9290528b5b6738a8be7c31.ctex"]
 
 [params]
 
