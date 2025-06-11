@@ -151,7 +151,7 @@ position = Vector2(48, 48)
 sprite_texture = ExtResource("7_i5y0i")
 
 [node name="Player" parent="." instance=ExtResource("2_puia7")]
-position = Vector2(47, 89)
+position = Vector2(47, 79)
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_w51ix")

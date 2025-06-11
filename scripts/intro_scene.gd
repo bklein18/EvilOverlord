@@ -23,7 +23,17 @@ func _ready():
 	first_minion_choice.show()
 	first_minion_choice.minion_chosen.connect(func(chosen_minion):
 		first_minion_choice.hide()
-		SceneManager.party = [Minions.wild_minion_from_enum(chosen_minion)]
+		var starter = Minions.wild_minion_from_enum(chosen_minion)
+		SceneManager.party = [starter]
+		var final_text_lines = [
+			"Ah, good choice! I always loved " + starter.Name + "!",
+			"But, one minion is never enough!",
+			"You'll need to venture into\nthe world and find more!",
+			"Good luck, boyo. I believe in you!"
+		]
+		for line in final_text_lines:
+			await info_text_box.show_text_and_wait_for_input(line)
+			await info_text_box.wait(0.1)
 		animation_player.play("IntroCutscene")
 		await animation_player.animation_finished
 		SceneManager.current_base_scene = load("res://scenes/Overworld.tscn")
